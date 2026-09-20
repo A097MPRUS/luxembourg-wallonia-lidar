@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Luxembourg &amp; Wallonie LiDAR</title>
+<meta name="description" content="LiDAR shaded relief next to aerial imagery across Luxembourg and Wallonia, with ruins, bunkers, cadastral footprints and bike trails. Runs entirely in the browser.">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --ground:#e9edf1; --panel:#ffffff; --sunk:#f3f6f9;
+    --ink:#10223a; --soft:#4d6076; --line:#d7e0e9;
+    --edge:#2f57d1; --accent:#1d49c4; --accent-soft:#e7eefc;
+    --shade:0 8px 26px rgba(12,28,48,.18), 0 1px 3px rgba(12,28,48,.12);
+    --r-lg:16px; --r-md:11px; --r-sm:8px;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --ground:#070d15; --panel:#101b28; --sunk:#17242f;
+      --ink:#e8f0f8; --soft:#9fb2c6; --line:#263542;
+      --edge:#6f92ff; --accent:#9bb6ff; --accent-soft:#1a2a46;
+      --shade:0 8px 28px rgba(0,0,0,.55), 0 1px 3px rgba(0,0,0,.4);
+    }
+  }
+  *{box-sizing:border-box}
+  [hidden]{display:none !important}
+  body{
+    margin:0; background:var(--ground); color:var(--ink);
+    font:400 16px/1.6 "IBM Plex Sans",system-ui,sans-serif;
+    padding:env(safe-area-inset-top,0) 16px env(safe-area-inset-bottom,0);
+  }
+  .wrap{max-width:860px; margin:0 auto; padding:48px 0 64px}
+  header{margin-bottom:32px}
+  h1{font-size:30px; line-height:1.25; font-weight:700; margin:0 0 8px}
+  .sub{color:var(--soft); margin:0; max-width:60ch}
+  h2{font-size:19px; font-weight:600; margin:40px 0 12px}
+  p{max-width:70ch}
+  a{color:var(--accent)}
+  .card{
+    background:var(--panel); border:1px solid var(--line);
+    border-radius:var(--r-lg); box-shadow:var(--shade);
+    padding:24px; margin:28px 0;
+  }
+  .go{
+    display:inline-block; background:var(--accent); color:#fff;
+    text-decoration:none; font-weight:600; font-size:17px;
+    padding:13px 22px; border-radius:var(--r-md); border:1px solid var(--accent);
+  }
+  @media (prefers-color-scheme:dark){ .go{color:#07101f} }
+  .alt{margin:14px 0 0; color:var(--soft); font-size:14.5px}
+  .alt .item{display:inline-block; white-space:nowrap; margin-right:16px}
+  .rec{
+    display:inline-block; font:500 12px/1 "IBM Plex Mono",monospace;
+    color:var(--edge); background:var(--accent-soft);
+    border:1px solid var(--line); border-radius:var(--r-sm);
+    padding:4px 7px; margin-left:4px; vertical-align:2px;
+  }
+  table{border-collapse:collapse; width:100%; font-size:14.5px; margin:8px 0 0}
+  th,td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top}
+  th{font-weight:600; color:var(--soft); font-size:13px; text-transform:uppercase; letter-spacing:.04em}
+  td.n{font-family:"IBM Plex Mono",monospace; white-space:nowrap}
+  .sw{display:inline-block; width:12px; height:12px; border-radius:3px; border:1px solid var(--line); margin-right:8px; vertical-align:-1px}
+  .note{background:var(--sunk); border:1px solid var(--line); border-radius:var(--r-md); padding:16px 18px; font-size:14.5px}
+  .note p{margin:0 0 10px} .note p:last-child{margin:0}
+  code{font-family:"IBM Plex Mono",monospace; font-size:13.5px; background:var(--sunk); border:1px solid var(--line); border-radius:4px; padding:1px 5px}
+  footer{margin-top:48px; padding-top:20px; border-top:1px solid var(--line); color:var(--soft); font-size:14px}
+  ul{max-width:70ch; padding-left:20px} li{margin:5px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Luxembourg &amp; Wallonie LiDAR</h1>
+    <p class="sub">Shaded relief from the Luxembourg and Walloon national LiDAR surveys, next to aerial
+    imagery, behind a draggable swipe divider. Built for finding ruined and abandoned structures,
+    including the ones hidden under forest canopy.</p>
+  </header>
+
+  <div class="card">
+    <a class="go" id="go" href="luxembourg-wallonie-lidar-v2.html">Open the map</a>
+    <p class="alt">
+      <span class="item"><a href="luxembourg-wallonie-lidar-v2.html">Desktop build</a><span class="rec" id="recD" hidden>recommended</span></span>
+      <span class="item"><a href="luxembourg-wallonie-lidar-mobile.html">Phone build</a><span class="rec" id="recM" hidden>recommended</span></span>
+    </p>
+  </div>
+
+  <h2>What it shows</h2>
+  <table>
+    <tr><th>Layer</th><th>Detail</th></tr>
+    <tr><td>Relief</td><td>Terrain (DTM), Surface (DSM), and Above ground (DSM minus DTM, computed in the browser). 50 cm raster in both territories.</td></tr>
+    <tr><td>Imagery</td><td>Esri World Imagery, native to zoom 19, revealed by dragging the swipe divider.</td></tr>
+    <tr><td>Ruins and abandoned</td><td class="n">8,478 points</td></tr>
+    <tr><td>Bike trails</td><td class="n">23,764 lines</td></tr>
+    <tr><td>Place names</td><td class="n">4,583 settlements</td></tr>
+    <tr><td>Condition outlines</td><td class="n">2,550 buildings</td></tr>
+    <tr><td>Cadastral footprints</td><td>ACT for Luxembourg, SPW PICC for Wallonia, from zoom 15.</td></tr>
+    <tr><td>Tools</td><td>Coordinate and address search, elevation readout, Scan (beta), four languages.</td></tr>
+  </table>
+
+  <h2>Point counts</h2>
+  <table>
+    <tr><th>Kind</th><th>Count</th></tr>
+    <tr><td><span class="sw" style="background:#d1495b"></span>Ruins</td><td class="n">1,348</td></tr>
+    <tr><td><span class="sw" style="background:#2f6f4e"></span>Bunkers</td><td class="n">1,026</td></tr>
+    <tr><td><span class="sw" style="background:#e07a1f"></span>Abandoned</td><td class="n">2,341</td></tr>
+    <tr><td><span class="sw" style="background:#e8c33a"></span>Disused</td><td class="n">3,153</td></tr>
+    <tr><td><span class="sw" style="background:#33383d"></span>Mine shafts</td><td class="n">139</td></tr>
+    <tr><td><span class="sw" style="background:#8a7a1f"></span>Brownfield</td><td class="n">471</td></tr>
+    <tr><td><span class="sw" style="background:#5b3a1e"></span>Bike trails</td><td class="n">23,764 lines</td></tr>
+  </table>
+  <p class="alt">Luxembourg 2,162 points, Wallonia 6,316. All from OpenStreetMap, pulled 2026-09-20.
+  Disused and Brownfield are off by default.</p>
+
+  <h2>Data sources</h2>
+  <table>
+    <tr><th>Source</th><th>Used for</th></tr>
+    <tr><td>Administration du cadastre et de la topographie (ACT), geoportail.lu</td><td>Luxembourg relief, flown February 2019, 15 points per square metre, 50 cm raster. Cadastral buildings.</td></tr>
+    <tr><td>Service public de Wallonie (SPW), geoservices.wallonie.be</td><td>Wallonia relief, LiDAR 2021 to 2022, 50 cm. PICC building footprints. Terrain elevation readout.</td></tr>
+    <tr><td>Esri World Imagery</td><td>Aerial imagery. Not open data, Esri terms apply.</td></tr>
+    <tr><td>OpenStreetMap contributors</td><td>Place names, ruins, bunkers, condition outlines, bike trails. Address search via Nominatim.</td></tr>
+    <tr><td>Open-Meteo, Copernicus DEM GLO-90</td><td>Elevation readout in Luxembourg, 90 m resolution. Not the LiDAR.</td></tr>
+    <tr><td>Leaflet 1.9.4</td><td>The only library. Loaded from cdnjs.</td></tr>
+  </table>
+
+  <h2>How it works</h2>
+  <ul>
+    <li>Each build is one self contained HTML file. No server, no build step, no database, no accounts, no API keys.</li>
+    <li>Nothing is stored in your browser. The page sets no cookies and uses no local storage.</li>
+    <li>Map tiles, elevation values and address searches are requested directly from the providers listed above.</li>
+  </ul>
+
+  <div class="note">
+    <p><strong>Elevation readout.</strong> In Wallonia the figure is a real 50 cm terrain model value.
+    In Luxembourg it comes from Copernicus GLO-90 at 90 m, because no keyless elevation service
+    exposes the Luxembourg LiDAR. The readout labels which one it used.</p>
+    <p><strong>Scan is beta.</strong> It compares surface and terrain hillshades to find structures with
+    no cadastral footprint. It saturates under closed canopy and it is not a survey instrument.</p>
+  </div>
+
+  <footer>
+    Source and documentation in the repository. Handoff notes:
+    <a href="docs/HANDOFF.md">HANDOFF</a>,
+    <a href="docs/ARCHITECTURE.md">ARCHITECTURE</a>,
+    <a href="docs/CHANGES.md">CHANGES</a>.
+  </footer>
+
+</div>
+<script>
+(function(){
+  var phone = window.matchMedia("(pointer:coarse)").matches && window.innerWidth < 900;
+  var go = document.getElementById("go");
+  if (phone) go.setAttribute("href", "luxembourg-wallonie-lidar-mobile.html");
+  document.getElementById(phone ? "recM" : "recD").hidden = false;
+})();
+</script>
+</body>
+</html>
