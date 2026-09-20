@@ -5,7 +5,7 @@ shaded relief derived from the two national LiDAR surveys next to aerial imagery
 draggable swipe divider, for finding ruined and abandoned structures, especially under forest
 canopy where aerial imagery shows nothing but treetops.
 
-Live site: **https://A097MPRUS.github.io/luxembourg-wallonie-lidar/**
+Live site: **https://a097mprus.github.io/luxembourg-wallonie-lidar/**
 
 ## Builds
 

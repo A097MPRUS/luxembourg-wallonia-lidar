@@ -27,10 +27,18 @@ C:\Users\User\.kun\default_workspace\Plans\
     allow-port-8000.cmd     one-time firewall helper (TCP 8000, private)
     RUINS-EXPANSION.md      change set A notes (totals superseded)
   claude\         this documentation folder (HANDOFF, CHANGES, AGENTS)
+  site\           the published GitHub Pages site, a git repo (see section 11)
+                  index.html + COPIES of both builds + README + docs\
+  sync-site.cmd   re-copies the builds and docs from tests\ and claude\
+                  into site\, then prints the commit and push commands
   work\           scratch: raw Overpass pulls, build scripts, test dumps
                   (safe to delete; the changelog references the scripts)
   handoff\        the previous agent's docs, kept for reference
 ```
+
+`site\` holds COPIES. `tests\` is still the only place the builds are edited.
+After changing a build, run `sync-site.cmd`, then commit and push from `site\`,
+or the live site silently serves the old version.
 
 History (2026-09-20, owner request): the older build files that used to sit in
 `Plans\` were DELETED, along with the macOS-only `serve.command` and
@@ -152,33 +160,53 @@ The owner's rule, extended to this folder: **every change updates CHANGES.md
 with a detailed entry, and this HANDOFF if state changed, in the same pass.**
 Small changes count. A change log that lags is worth nothing.
 
-## 11. Publishing plan: GitHub Pages (owner's wish, 2026-09-20)
+## 11. Published: GitHub Pages (done 2026-09-20)
 
-The owner wants a public website for the map in the style of a personal
-lidar-maps site: own URL, no signup, map fills the page. NOTHING has been
-created yet (owner said "don't do anything" for now). What was discussed and
-what it takes:
+The owner green-lit publishing on 2026-09-20 and chose GitHub Pages, public,
+under the A097MPRUS account. It is live.
 
-- Host: GitHub Pages. Free, HTTPS included, custom domain supported, no card
-  needed. URL would be `https://<user>.github.io/<repo>/`. Cloudflare Pages is
-  the equal alternative (unlimited bandwidth, also free). Both fit because the
-  builds are plain static files with no backend or keys.
-- Missing piece: an `index.html`. GitHub Pages serves `index.html` at the
-  folder root; the project has only the two long-named builds. A landing page
-  is needed that routes phones to the mobile build and desktops to the v2
-  build, with manual links and the data credits. Not written yet.
-- Also useful in the repo: `README.md` and a `.nojekyll` file (stops Pages
-  from processing the big single-line data blocks).
-- Costs: hosting EUR 0. The domain is the only real cost (`.org` about
-  EUR 10-15/year; `.lu` about EUR 25-40/year and needs an EU/Luxembourg
-  link from an accredited registrar).
-- Cautions before going public:
-  - Esri World Imagery is NOT open data; the LiDAR relief (ACT/SPW) is. A
-    public site using the Esri layer is a licensing question, not a technical
-    one. Open alternative: the geoportail.lu ortho layers.
-  - Address search uses Nominatim's public API; fine at personal scale, needs
-    a plan at public scale.
-  - A public repo makes the dataset and the code public. Fine, but note it.
-- Suggested steps when the owner green-lights it: create the repo, add
-  `index.html` + `README.md` + `.nojekyll`, upload the two builds, enable
-  Pages in the repo settings, optionally point a custom domain at it.
+- **URL**: https://a097mprus.github.io/luxembourg-wallonie-lidar/
+- **Repo**: https://github.com/A097MPRUS/luxembourg-wallonie-lidar, public,
+  branch `main`, Pages serving from `main` at `/`.
+- **Local repo**: `Plans\site\`. Its git identity is set on that repo only,
+  `A097MPRUS <314761645+A097MPRUS@users.noreply.github.com>`, so the owner's
+  real email stays out of the public commit history. No global git config was
+  touched.
+- **Contents**: `index.html` (new landing page), copies of both builds,
+  `README.md`, `.nojekyll` (stops Pages processing the single-line data
+  blocks), `.gitattributes` with `* -text` (keeps the builds byte exact on
+  checkout), and `docs\` with HANDOFF, ARCHITECTURE, CHANGES and AGENTS.
+- **Landing page behaviour**: one primary "Open the map" action that points at
+  the mobile build when `matchMedia("(pointer:coarse)")` and the viewport is
+  under 900 px, otherwise the v2 build, plus explicit links to both so either
+  is always reachable. It is a link change, not a redirect. If the owner wants
+  the URL to land straight in the map, that is a two line change.
+- **Verified live**: Pages build succeeded in 22.2 s; the landing page and the
+  v2 build both load over HTTPS in a real browser, 48 of 48 tiles, no console
+  errors, no mixed content.
+
+### To update the live site after a build change
+
+```
+Plans\sync-site.cmd
+cd site
+git add -A
+git commit -m "..."
+git push
+```
+
+Pages rebuilds in well under a minute.
+
+### Still open for the owner to decide
+
+- **Esri World Imagery is not open data.** The site is public and serves that
+  layer. This is a licensing question, not a technical one, and it was flagged
+  before publishing rather than changed unilaterally. The open alternative is
+  the geoportail.lu ortho layers.
+- **Nominatim** address search is now reachable by the public. Fine at the
+  current scale; it needs a plan if the site gets real traffic.
+- **A public repo makes the dataset and the code public.** That was accepted.
+- **Custom domain** is supported and free to point at Pages. Only the domain
+  registration costs anything: `.org` roughly EUR 10-15/year, `.lu` roughly
+  EUR 25-40/year through an accredited registrar and it needs an EU or
+  Luxembourg link.

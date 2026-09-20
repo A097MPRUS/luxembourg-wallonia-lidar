@@ -300,6 +300,114 @@ hardware; bike canvas pixel re-checks are flaky under headless virtual time;
 the drag reproduction needed real-motion runs and worked reproducibly once
 clamped vs always free post-fix.
 
+## Change set C - published as a GitHub Pages site (owner green-light)
+
+### C1. New `site/` folder, the GitHub Pages deliverable
+
+**What.** A new folder `Plans/site/` was created and is now a git repository
+pushed to GitHub. Contents:
+
+```
+site/
+  index.html                              landing page, new file
+  luxembourg-wallonie-lidar-v2.html       copy of the tests/ build, byte identical
+  luxembourg-wallonie-lidar-mobile.html   copy of the tests/ build, byte identical
+  README.md                               project readme, new file
+  .nojekyll                               stops Pages processing the data blocks
+  .gitattributes                          "* -text", keeps the builds byte exact
+  docs/                                   HANDOFF, ARCHITECTURE, CHANGES, AGENTS
+```
+
+The builds in `tests/` are untouched and remain the working copies. The site
+copies are refreshed by the new `Plans/sync-site.cmd`.
+
+**Where.** Repo `A097MPRUS/luxembourg-wallonie-lidar`, public, branch `main`,
+Pages serving from `main` at `/`. Live at
+`https://a097mprus.github.io/luxembourg-wallonie-lidar/`.
+
+**Why.** HANDOFF section 11 was the plan and said nothing was to be created
+until the owner green-lit it. The owner green-lit it on 2026-09-20 and chose
+GitHub Pages, public, under the A097MPRUS account.
+
+**Evidence.** Pages build `built` in 22.2 s, no error. Live site loaded in a
+real browser at 1280x900: landing page renders, `Open the map` points at the
+v2 build, the map itself loads 48 of 48 tiles over HTTPS with zero console
+errors and zero mixed content warnings, `mapdata` parses to 8,478 points.
+
+### C2. `index.html`, the landing page
+
+**What.** A new single page in the project's own visual language: the same
+IBM Plex Sans/Mono, the same light and dark tokens read out of the build
+(`--ground`, `--panel`, `--ink`, `--line`, `--accent`), the same radii. House
+style respected: no em dashes, no pill buttons, no gradients, no purple, no
+emoji, no scroll animations.
+
+It carries a primary `Open the map` action, explicit links to both builds, a
+`recommended` marker on the one matching the current device, the layer table,
+the point counts with colour swatches, the data sources with the Esri
+"not open data" note, the no-cookies statement, and the Scan beta caveat.
+
+**Device routing.** `matchMedia("(pointer:coarse)") && innerWidth < 900` sends
+the primary action to the mobile build. It is a link change, not a redirect,
+so either build is always reachable. Flipping it to an automatic redirect is a
+two line change if the owner prefers landing straight in the map.
+
+**Figures.** Every number on the page was read out of the shipped data blocks
+with a script, not copied from a doc: ruins 8,478 (kinds 1,348 / 1,026 / 2,341
+/ 3,153 / 139 / 471; LU 2,162, WAL 6,316), bike lines 23,764 (LU 7,458,
+WAL 16,306), places 4,583, shapes 2,550. Identical in both builds. This also
+re-confirmed the recorded hashes: v2 `dd710c1d...` 2,344,433 bytes, mobile
+`805131a2...` 2,354,504 bytes.
+
+**Two bugs found and fixed while testing, both in the new page only:**
+
+1. Both `recommended` chips showed at once. `.rec{display:inline-block}` beat
+   the user agent's `[hidden]{display:none}`. Fixed with an explicit
+   `[hidden]{display:none !important}`, the same guard the builds already use.
+   Verified: on desktop `recD.hidden=false`, `recM.hidden=true`; at 375 px the
+   pair is reversed and `goHref` becomes the mobile build.
+2. At 375 px the chip wrapped onto its own line under the wrong link. The link
+   and its chip are now wrapped in a `white-space:nowrap` span.
+
+**Evidence.** Served locally on port 8011 and driven in a real browser. All
+eight linked paths return 200. No horizontal overflow at 375 px. Desktop build
+from the site folder: 48 tiles, 15 panes, `ui` `swipe` `bikes` present, 8,478
+points, no console errors. Mobile build from the site folder: icon rail, bottom
+bar, panel, bikes toggle, no overflow, no console errors.
+
+### C3. `README.md` and `sync-site.cmd`
+
+**What.** A README covering the two builds, how to run without a build step,
+the feature table, the point counts, the data sources with attribution, the
+privacy statement, the caveats (Scan is beta, the four dead ends in automatic
+detection, phone untested on hardware, Nominatim is personal scale), and links
+to the four docs. `Plans/sync-site.cmd` re-copies the builds and docs from
+`tests/` and `claude/` into `site/` and prints the commit and push commands.
+
+**Why.** The site copies would otherwise drift silently from the working
+builds, which is exactly the class of problem this change log exists to stop.
+
+### C4. Git identity used for the public repo
+
+**What.** The repo uses a local git identity of
+`A097MPRUS <314761645+A097MPRUS@users.noreply.github.com>`, set on the repo
+only, not globally.
+
+**Why.** Commits on a public repo are public. The GitHub noreply address keeps
+the owner's real email out of the public commit history. No global git config
+was touched.
+
+### C5. Things the owner should decide
+
+- **Esri World Imagery is not open data.** The site is now public and serves
+  that layer. This was flagged in HANDOFF section 11 before publishing and is
+  a licensing question, not a technical one. The open alternative is the
+  geoportail.lu ortho layers. Nothing was changed without asking.
+- **Nominatim** address search is now reachable by the public. Fine at the
+  current scale, needs a plan if the site gets traffic.
+- **Custom domain** is supported and free to point at Pages; only the domain
+  registration costs anything.
+
 ## Rebuild recipe (if the data ever needs regenerating)
 
 - Raw pulls: `work/*.overpass` files; responses in `work/*.json`.
