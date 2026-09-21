@@ -1286,6 +1286,42 @@ body:not(:has(#rail)) #panel .grp.collapsed > :not(.lbl){ display:none; }
 #panel .finder-msg.bad{ color:#ff8b73; }
 body:not(:has(#rail)) #panel{ width:288px; }
 /* ================= end panel refresh v4 ================= */
+/* ==== map tools experiment (remove with the tools block) ==== */
+#panel .tool-btn[aria-pressed="true"]{ background:var(--px-accent-soft);
+  border-color:color-mix(in srgb, var(--px-accent) 60%, transparent); color:var(--px-ink); }
+#app.measuring .leaflet-container{ cursor:crosshair; }
+.saved-chip{ display:flex; align-items:center; gap:6px; }
+.saved-chip .go{ flex:1 1 auto; cursor:pointer; }
+.saved-chip .x{ border:0; background:none; color:var(--px-ink3); cursor:pointer;
+  font:inherit; font-size:13px; padding:2px 5px; }
+.saved-chip .x:hover{ color:var(--px-ink); }
+.locfab{
+  position:absolute; right:12px; bottom:56px; z-index:1000;
+  width:46px; height:46px; border-radius:50%;
+  background:var(--panel); border:1px solid var(--line); box-shadow:var(--shade);
+  color:var(--accent); display:grid; place-items:center; cursor:pointer; padding:0;
+}
+.locfab:hover{ border-color:var(--accent); }
+.locfab:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+.locmarker{ background:transparent; border:0; }
+.locmarker .locmarker-dot{
+  position:absolute; left:4px; top:4px; width:12px; height:12px; border-radius:50%;
+  background:#1a73e8; border:2px solid #fff; box-shadow:0 0 0 1.5px rgba(26,115,232,.30);
+  pointer-events:none;
+}
+.locmarker .locmarker-halo{
+  position:absolute; left:0; top:0; width:20px; height:20px; border-radius:50%;
+  background:rgba(26,115,232,.32); pointer-events:none;
+  animation:locpulse 2.4s ease-out infinite;
+}
+@keyframes locpulse{
+  0%{ transform:scale(.55); opacity:.9; }
+  70%{ transform:scale(2.6); opacity:0; }
+  100%{ transform:scale(2.6); opacity:0; }
+}
+@media (prefers-reduced-motion:reduce){
+  .locmarker .locmarker-halo{ animation:none; transform:scale(1.5); opacity:.4; }
+}
 
 </style>
 </head>
@@ -1293,6 +1329,13 @@ body:not(:has(#rail)) #panel{ width:288px; }
 
 <div id="app">
   <div id="map"></div>
+  <button type="button" class="locfab" id="locBtn" aria-label="My location" title="My location">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="7.4" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="12" cy="12" r="2.3" fill="currentColor"/>
+      <path d="M12 2v3.2M12 18.8V22M2 12h3.2M18.8 12H22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+  </button>
 
   <div class="swipe" id="swipe">
     <span class="tag l" id="tagL">Relief</span>
@@ -1396,6 +1439,61 @@ body:not(:has(#rail)) #panel{ width:288px; }
           </div>
           <p class="tool-out" id="scanOut"></p>
           <p class="hint" id="scanHint">Red boxes are structures with no cadastral footprint.</p>
+          <div class="tool-row">
+            <button type="button" class="tool-btn" id="distBtn" aria-pressed="false">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <circle cx="2.4" cy="13.6" r="1.4" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="13.6" cy="2.4" r="1.4" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M3.7 12.3 12.3 3.7" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2.2 2"/>
+              </svg>
+              <span id="distLbl">Distance</span>
+            </button>
+            <button type="button" class="tool-btn" id="areaBtn" aria-pressed="false">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M2.5 11.5 6 2.8l7 4-3.5 1.7 1.7 3.6-4.7.5-4 1.4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              </svg>
+              <span id="areaLbl">Area</span>
+            </button>
+            <button type="button" class="tool-btn" id="ptBtn" aria-pressed="false">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M8 14.5S2.8 9.7 2.8 6.4a5.2 5.2 0 1 1 10.4 0C13.2 9.7 8 14.5 8 14.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <circle cx="8" cy="6.4" r="1.9" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+              <span id="ptLbl">Point</span>
+            </button>
+            <button type="button" class="tool-mini" id="measureClear">Clear</button>
+          </div>
+          <p class="tool-out" id="measureOut"></p>
+          <p class="hint" id="measureHint">Click the map to set points. Press the active button again to finish.</p>
+          <div class="tool-row">
+            <button type="button" class="tool-btn" id="nightBtn" aria-pressed="false">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M13.4 9.6A6 6 0 0 1 6.4 2.6a6 6 0 1 0 7 7Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              </svg>
+              <span id="nightLbl">Night</span>
+            </button>
+            <button type="button" class="tool-btn" id="fsBtn" aria-pressed="false">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M2.5 6V3.5a1 1 0 0 1 1-1H6M10 2.5h2.5a1 1 0 0 1 1 1V6M13.5 10v2.5a1 1 0 0 1-1 1H10M6 13.5H3.5a1 1 0 0 1-1-1V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span id="fsLbl">Full screen</span>
+            </button>
+            <button type="button" class="tool-btn" id="shareBtn" aria-pressed="false">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <circle cx="5.2" cy="8" r="2.2" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="11.4" cy="3.6" r="1.9" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="11.4" cy="12.4" r="1.9" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M6.9 6.9 9.7 4.7M6.9 9.1l2.8 2.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span id="shareLbl">Share view</span>
+            </button>
+          </div>
+          <p class="tool-out" id="toolOut"></p>
+          <div class="row" style="margin-top:2px"><span class="lbl" id="conLbl">Relief contrast</span><span class="v" id="conVal">100%</span></div>
+          <input type="range" id="contrast" min="60" max="140" value="100" step="5" aria-labelledby="conLbl">
+          <div class="row" style="margin-top:4px"><span class="lbl" id="savedLbl">Remembered spots</span><button type="button" class="tool-mini" id="saveBtn">Keep this spot</button></div>
+          <div class="chips" id="saved"></div>
+          <p class="hint" id="savedHint">This session only. Nothing is written to the device.</p>
         </div>
         <div class="grp">
           <span class="lbl" id="sitesLbl">Sites</span>
@@ -1466,7 +1564,9 @@ body:not(:has(#rail)) #panel{ width:288px; }
   <p>When your pointer rests over the map, the exact coordinate under it is sent to one external
   service so the altitude can be looked up: Open-Meteo inside Luxembourg, SPW inside Wallonia.
   This is a precise geographic coordinate, though it is a point on the map rather than your own
-  location. The map never requests your device's location and does not use the geolocation API.
+  location. The <b>My location</b> button asks your browser for your position only when you press it,
+  and nothing is sent unless you do. The position itself never leaves your device; the map simply
+  shows it and loads the usual tiles around it.
   Switching off the readout is not currently possible; if that matters to you, work offline from a
   cached view or remove the elevation lookup from the file.</p>
 
@@ -1477,7 +1577,7 @@ body:not(:has(#rail)) #panel{ width:288px; }
   <h3>Your rights and contacts</h3>
   <p>Because the publisher holds no data about you, there is nothing to access, correct or erase.
   For data held by the services above, contact them directly and consult their own privacy notices.</p>
-  <p>Questions about this file: <span class="fill">[operator name and contact email]</span></p>
+  <p>Questions about this file: <span class="fill">phoenix550@icloud.com</span></p>
 </template>
 
 <template id="doc-terms">
@@ -2293,6 +2393,21 @@ body:not(:has(#rail)) #panel{ width:288px; }
     document.getElementById("toolsLbl").textContent = t("tools");
     document.getElementById("scanBtnLbl").textContent = t("scanbtn");
     document.getElementById("scanHint").textContent = t("scanhint");
+    document.getElementById("distLbl").textContent = t2("distbtn");
+    document.getElementById("areaLbl").textContent = t2("areabtn");
+    document.getElementById("ptLbl").textContent = t2("ptbtn");
+    document.getElementById("measureHint").textContent = t2("finishhint");
+    document.getElementById("measureClear").textContent = t2("clearmeasure");
+    document.getElementById("nightLbl").textContent = t2("nightbtn");
+    document.getElementById("fsLbl").textContent = t2("fslbl");
+    var locBtnEl = document.getElementById("locBtn");
+    if (locBtnEl) { locBtnEl.setAttribute("aria-label", t2("locbtn")); locBtnEl.title = t2("locbtn"); }
+    document.getElementById("shareLbl").textContent = t2("sharebtn");
+    document.getElementById("conLbl").textContent = t2("conlbl");
+    document.getElementById("savedLbl").textContent = t2("savedlbl");
+    document.getElementById("saveBtn").textContent = t2("keepsave");
+    document.getElementById("savedHint").textContent = t2("savedhint");
+    renderSaved();
     buildLegend();
     buildLangMenu(); buildLayers(); buildImagery(); buildSites();
     attrib._update();
@@ -2768,6 +2883,7 @@ body:not(:has(#rail)) #panel{ width:288px; }
 
   function routeHash() {
     var h = (location.hash || "").replace(/^#/, "");
+    if (h && tryViewHash(h)) return;
     if (h && showDoc(h)) return;
     closeLegal();
   }
@@ -3071,6 +3187,250 @@ body:not(:has(#rail)) #panel{ width:288px; }
   document.getElementById("scanClear").addEventListener("click", function () {
     scanLayer.clearLayers(); scanOut.textContent = "";
   });
+
+  /* ---------------- map tools (experiment block) ---------------- */
+  /* Distance, area and point measuring, night mode, relief contrast, my
+     location, full screen, a shareable view link and a session-only list of
+     remembered spots. Everything runs inside this file; nothing is stored. */
+  var T2 = {
+    en:{distbtn:"Distance",areabtn:"Area",ptbtn:"Point",finishhint:"Click the map to set points. Press the active button again to finish.",clearmeasure:"Clear",nightbtn:"Night",fslbl:"Full screen",locbtn:"My location",locwait:"Finding your location...",locfail:"Location unavailable",sharebtn:"Share view",sharecopied:"Link copied to the clipboard",sharefail:"Copying was blocked. Link:",conlbl:"Relief contrast",savedlbl:"Remembered spots",keepsave:"Keep this spot",remove:"Remove",saveempty:"No spots kept yet",savedhint:"This session only. Nothing is written to the device."},
+    fr:{distbtn:"Distance",areabtn:"Surface",ptbtn:"Point",finishhint:"Cliquez sur la carte pour poser des points. Re-appuyez sur le bouton actif pour terminer.",clearmeasure:"Effacer",nightbtn:"Nuit",fslbl:"Plein écran",locbtn:"Ma position",locwait:"Recherche de la position...",locfail:"Position indisponible",sharebtn:"Partager la vue",sharecopied:"Lien copié dans le presse-papiers",sharefail:"Copie bloquée. Lien :",conlbl:"Contraste du relief",savedlbl:"Points retenus",keepsave:"Retenir ce point",remove:"Retirer",saveempty:"Aucun point retenu",savedhint:"Cette session seulement. Rien n'est écrit sur l'appareil."},
+    de:{distbtn:"Entfernung",areabtn:"Fläche",ptbtn:"Punkt",finishhint:"Karte anklicken, um Punkte zu setzen. Aktive Taste erneut drücken zum Beenden.",clearmeasure:"Löschen",nightbtn:"Nacht",fslbl:"Vollbild",locbtn:"Mein Standort",locwait:"Standort wird gesucht...",locfail:"Standort nicht verfügbar",sharebtn:"Ansicht teilen",sharecopied:"Link in die Zwischenablage kopiert",sharefail:"Kopieren blockiert. Link:",conlbl:"Relief-Kontrast",savedlbl:"Gemerkte Orte",keepsave:"Diesen Ort merken",remove:"Entfernen",saveempty:"Noch keine Orte gemerkt",savedhint:"Nur für diese Sitzung. Es wird nichts auf dem Gerät gespeichert."},
+    lb:{distbtn:"Distanz",areabtn:"Fläch",ptbtn:"Punkt",finishhint:"Klickt op d'Kaart fir Punkten ze setzen. Dréckt de aktive Knäppchen nach eng Kéier fir fäerdeg ze maachen.",clearmeasure:"Läschen",nightbtn:"Nuecht",fslbl:"Vollbild",locbtn:"Meng Positioun",locwait:"Positioun gëtt gesicht...",locfail:"Positioun net verfügbar",sharebtn:"Vue deelen",sharecopied:"Link an d'Tëschendepot kopéiert",sharefail:"Kopéiere blockéiert. Link:",conlbl:"Relief-Kontrast",savedlbl:"Gemierkt Plazen",keepsave:"Dës Plaz mierken",remove:"Ewechhuelen",saveempty:"Nach keng Plaz gemierkt",savedhint:"Nëmmen dës Sessioun. Näischt gëtt um Apparat gespäichert."}
+  };
+  function t2(k) { return (T2[lang] || T2.en)[k]; }
+
+  var toolOut = document.getElementById("toolOut");
+  var measureOut = document.getElementById("measureOut");
+  var contrastBox = document.getElementById("contrast");
+  var conVal = document.getElementById("conVal");
+  var tilePane = map.getPane("tilePane");
+  var nightOn = false, contrastV = 100;
+
+  function pxAccent() {
+    var v = getComputedStyle(document.getElementById("panel")).getPropertyValue("--px-accent");
+    return (v || "#4fe0c8").trim();
+  }
+
+  function applyTileFilter() {
+    var f = [];
+    if (document.getElementById("mono").checked) f.push("grayscale(1) contrast(1.06) brightness(1.03)");
+    if (contrastV !== 100) f.push("contrast(" + (contrastV / 100).toFixed(2) + ")");
+    if (nightOn) f.push("brightness(.6) saturate(.85)");
+    tilePane.style.filter = f.length ? f.join(" ") : "none";
+  }
+
+  function setNight(on) {
+    nightOn = on;
+    if (on) document.documentElement.setAttribute("data-theme", "dark");
+    else document.documentElement.removeAttribute("data-theme");
+    document.getElementById("nightBtn").setAttribute("aria-pressed", String(on));
+    applyTileFilter();
+  }
+  document.getElementById("nightBtn").addEventListener("click", function () { setNight(!nightOn); });
+  document.getElementById("mono").addEventListener("change", applyTileFilter);
+  contrastBox.addEventListener("input", function () {
+    contrastV = parseInt(contrastBox.value, 10);
+    conVal.textContent = contrastV + "%";
+    applyTileFilter();
+  });
+
+  /* --- measuring --- */
+  var measureMode = null, measurePts = [], measureLine = null, measureMarks = [];
+  var distBtn = document.getElementById("distBtn");
+  var areaBtn = document.getElementById("areaBtn");
+  var ptBtn = document.getElementById("ptBtn");
+
+  function addMeasureDot(ll) {
+    var d = L.circleMarker(ll, { radius: 4, pane: "marks", color: "#fff", weight: 2,
+      fillColor: pxAccent(), fillOpacity: 1, interactive: false, keyboard: false });
+    d.addTo(map);
+    measureMarks.push(d);
+  }
+  function redrawMeasure() {
+    if (measureLine) { map.removeLayer(measureLine); measureLine = null; }
+    var ac = pxAccent(), i;
+    if (measurePts.length < 2) { measureOut.textContent = ""; return; }
+    if (measureMode === "dist") {
+      var total = 0;
+      for (i = 1; i < measurePts.length; i++) total += measurePts[i - 1].distanceTo(measurePts[i]);
+      measureLine = L.polyline(measurePts, { pane: "marks", color: ac, weight: 2.5,
+        dashArray: "7 7", interactive: false });
+      measureOut.textContent = total >= 1000 ? (total / 1000).toFixed(2) + " km"
+                                             : Math.round(total) + " m";
+    } else if (measureMode === "area") {
+      var n = measurePts.length, a = 0, p1, p2, z = map.getZoom();
+      for (i = 0; i < n; i++) {
+        p1 = map.project(measurePts[i], z);
+        p2 = map.project(measurePts[(i + 1) % n], z);
+        a += p1.x * p2.y - p2.x * p1.y;
+      }
+      var m2 = Math.abs(a) / 2;
+      measureLine = L.polygon(measurePts, { pane: "marks", color: ac, weight: 2.5,
+        dashArray: "7 7", fillColor: ac, fillOpacity: 0.12, interactive: false });
+      measureOut.textContent = m2 >= 10000 ? (m2 / 10000).toFixed(2) + " ha"
+                                           : Math.round(m2) + " m2";
+    }
+    measureLine.addTo(map);
+  }
+  function measureEnd() {
+    measureMode = null;
+    app.classList.remove("measuring");
+    [distBtn, areaBtn, ptBtn].forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+    map.doubleClickZoom.enable();
+  }
+  function measureWipe() {
+    measureEnd();
+    if (measureLine) { map.removeLayer(measureLine); measureLine = null; }
+    measureMarks.forEach(function (d) { map.removeLayer(d); });
+    measureMarks = [];
+    measurePts = [];
+    measureOut.textContent = "";
+  }
+  function setMeasureMode(mode) {
+    if (measureMode === mode) { measureEnd(); return; }
+    measureEnd();
+    measureMode = mode;
+    app.classList.add("measuring");
+    map.doubleClickZoom.disable();
+    (mode === "dist" ? distBtn : mode === "area" ? areaBtn : ptBtn)
+      .setAttribute("aria-pressed", "true");
+  }
+  distBtn.addEventListener("click", function () { setMeasureMode("dist"); });
+  areaBtn.addEventListener("click", function () { setMeasureMode("area"); });
+  ptBtn.addEventListener("click", function () { setMeasureMode("pt"); });
+  document.getElementById("measureClear").addEventListener("click", measureWipe);
+  map.on("click", function (e) {
+    if (measureMode === "dist" || measureMode === "area") {
+      measurePts.push(e.latlng);
+      addMeasureDot(e.latlng);
+      redrawMeasure();
+    } else if (measureMode === "pt") {
+      dropPin(e.latlng);
+    }
+  });
+  map.on("dblclick", function () {
+    if (measureMode === "dist" || measureMode === "area") measureEnd();
+  });
+
+  /* --- remembered spots (session only) --- */
+  var savedSpots = [];
+  var savedBox = document.getElementById("saved");
+  function renderSaved() {
+    savedBox.innerHTML = "";
+    if (!savedSpots.length) {
+      var e = document.createElement("p");
+      e.className = "hint";
+      e.textContent = t2("saveempty");
+      savedBox.appendChild(e);
+      return;
+    }
+    savedSpots.forEach(function (s, i) {
+      var c = document.createElement("div");
+      c.className = "chip saved-chip";
+      var go = document.createElement("span");
+      go.className = "go";
+      go.textContent = s.lat.toFixed(5) + ", " + s.lng.toFixed(5);
+      go.addEventListener("click", function () {
+        flyThere([s.lat, s.lng], Math.max(s.zoom, 15));
+        dropPin(L.latLng(s.lat, s.lng));
+      });
+      var x = document.createElement("button");
+      x.type = "button";
+      x.className = "x";
+      x.textContent = "x";
+      x.title = t2("remove");
+      x.setAttribute("aria-label", t2("remove"));
+      x.addEventListener("click", function () { savedSpots.splice(i, 1); renderSaved(); });
+      c.appendChild(go);
+      c.appendChild(x);
+      savedBox.appendChild(c);
+    });
+  }
+  document.getElementById("saveBtn").addEventListener("click", function () {
+    var c = pin ? pin.getLatLng() : map.getCenter();
+    savedSpots.push({ lat: c.lat, lng: c.lng, zoom: map.getZoom() });
+    renderSaved();
+  });
+
+  /* --- my location (pulsing blue marker + accuracy ring) --- */
+  var locationLayer = null;
+  var LOC_ICON = L.divIcon({
+    className: "locmarker",
+    html: '<span class="locmarker-halo"></span><span class="locmarker-dot"></span>',
+    iconSize: [20, 20], iconAnchor: [10, 10]
+  });
+  function showLocationDot(ll, accuracyM) {
+    if (locationLayer) { map.removeLayer(locationLayer); locationLayer = null; }
+    var layers = [];
+    if (accuracyM && isFinite(accuracyM) && accuracyM > 0) {
+      layers.push(L.circle(ll, { radius: accuracyM, color: "#1a73e8", weight: 1,
+        opacity: 0.25, fillColor: "#1a73e8", fillOpacity: 0.06,
+        interactive: false, stroke: true }));
+    }
+    layers.push(L.marker(ll, { icon: LOC_ICON, interactive: false, keyboard: false,
+      zIndexOffset: 1000 }));
+    locationLayer = L.layerGroup(layers).addTo(map);
+  }
+  document.getElementById("locBtn").addEventListener("click", function () {
+    if (!navigator.geolocation) { toolOut.textContent = t2("locfail"); return; }
+    toolOut.textContent = t2("locwait");
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      var ll = L.latLng(pos.coords.latitude, pos.coords.longitude);
+      if (!inTerritory(ll.lng, ll.lat, DATA.borders.both)) { toolOut.textContent = t("badplace"); return; }
+      flyThere([ll.lat, ll.lng], Math.max(map.getZoom(), 14));
+      showLocationDot(ll, pos.coords.accuracy);
+      toolOut.textContent = ll.lat.toFixed(5) + ", " + ll.lng.toFixed(5);
+    }, function () { toolOut.textContent = t2("locfail"); },
+    { timeout: 12000, maximumAge: 30000, enableHighAccuracy: false });
+  });
+
+  /* --- full screen --- */
+  document.getElementById("fsBtn").addEventListener("click", function () {
+    if (document.fullscreenElement) {
+      if (document.exitFullscreen) document.exitFullscreen();
+    } else if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+    }
+  });
+
+  /* --- shareable view link --- */
+  function viewHash() {
+    var c = map.getCenter(), z = map.getZoom();
+    return c.lat.toFixed(5) + "," + c.lng.toFixed(5) + "," + (Math.round(z * 4) / 4);
+  }
+  function tryViewHash(h) {
+    var m = /^([-+]?\d+(?:\.\d+)?)\s*,\s*([-+]?\d+(?:\.\d+)?)(?:\s*,\s*(\d+(?:\.\d+)?))?$/.exec(h);
+    if (!m) return false;
+    var lat = parseFloat(m[1]), lng = parseFloat(m[2]);
+    if (!isFinite(lat) || !isFinite(lng) || Math.abs(lat) > 85 || Math.abs(lng) > 180) return false;
+    var z = m[3] ? parseFloat(m[3]) : 15;
+    z = Math.max(map.getMinZoom(), Math.min(20, z));
+    flyThere([lat, lng], z);
+    return true;
+  }
+  document.getElementById("shareBtn").addEventListener("click", function () {
+    var u = location.origin + location.pathname + "#" + viewHash();
+    try { history.replaceState(null, "", "#" + viewHash()); } catch (e) {}
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(u).then(function () {
+        toolOut.textContent = t2("sharecopied");
+      }, function () { toolOut.textContent = t2("sharefail") + " " + u; });
+    } else {
+      toolOut.textContent = t2("sharefail") + " " + u;
+    }
+  });
+  var hashTimer = null;
+  map.on("moveend", function () {
+    if (currentDoc) return;
+    clearTimeout(hashTimer);
+    hashTimer = setTimeout(function () {
+      try { history.replaceState(null, "", "#" + viewHash()); } catch (e) {}
+    }, 350);
+  });
+
+  applyTileFilter();
+  renderSaved();
 
   /* ---------------- boot ---------------- */
   app.classList.add("mono");
