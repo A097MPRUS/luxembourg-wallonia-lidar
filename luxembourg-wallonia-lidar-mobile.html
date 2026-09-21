@@ -2425,7 +2425,8 @@ body:not(:has(#rail)) #panel{ width:288px; }
     panelTouched = true;
     setPanelOpen(!panel.classList.contains("open"));
   });
-  function fitPanel() { if (!panelTouched) setPanelOpen(window.innerWidth >= 760); }
+  /* The Layers panel starts collapsed on every screen; it opens only when the user asks. */
+  function fitPanel() { if (!panelTouched) setPanelOpen(false); }
 
   opacity.addEventListener("input", function () {
     opVal.textContent = opacity.value + "%";
