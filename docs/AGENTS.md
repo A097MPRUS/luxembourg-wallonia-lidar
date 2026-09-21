@@ -52,10 +52,6 @@ colour close to the neutral footprint blue.
 | Olive-brown | #8a7a1f | Brownfield (off by default) |
 | Dark brown | #5b3a1e | Bike trails overlay (lines, not dots) |
 
-## House style
-
-No em dashes in UI copy, no pill buttons, no gradients, no purple, no emoji
-icons, no scroll animations, no invented metrics.
 
 ## Testing
 
