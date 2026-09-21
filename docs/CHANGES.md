@@ -444,6 +444,19 @@ the old page from GitHub's CDN cache for a few minutes afterwards.
 **To undo** (only if the owner asks): make the repo public again and
 re-enable Pages from `main` at `/`. Resolve the imagery licence first.
 
+### C8. Repo made public again, Pages re-enabled (2026-09-21)
+
+**What.** Reverted C7: visibility private -> public, Pages re-enabled from
+`main` at `/`.
+
+**Why.** C7 was a misreading. The owner's instruction was conditional: make it
+private only if the Esri imagery made the project illegal. The answer was
+that it does not (standard tile use with the on-map attribution), so the
+takedown should never have happened. Owner: "put it back up".
+
+**Evidence.** Pages status `built`; `index.html` and the v2 build both return
+HTTP 200 on fresh requests.
+
 ## Rebuild recipe (if the data ever needs regenerating)
 
 - Raw pulls: `work/*.overpass` files; responses in `work/*.json`.

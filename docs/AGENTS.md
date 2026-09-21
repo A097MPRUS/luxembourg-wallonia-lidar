@@ -45,14 +45,12 @@ Read `HANDOFF.md` first, then `CHANGES.md`. Short version:
 - When in doubt, ask the owner rather than inventing. The orange "Abandoned"
   chip collided with cadastre colours once before; the "disused" colour
   collided with the neutral footprint blue once before. Do not repeat either.
-- The GitHub repo is now PRIVATE and Pages is OFF (2026-09-21, owner request,
-  HANDOFF section 11). Do not make it public or re-enable Pages unasked.
-  It was previously published as a GitHub Pages site:
+- The map is PUBLISHED as a public GitHub Pages site (HANDOFF section 11):
   https://a097mprus.github.io/luxembourg-wallonie-lidar/ from the repo
   `A097MPRUS/luxembourg-wallonie-lidar`, served from `Plans\site\`.
   `site\` holds COPIES of the builds. `tests\` is still where they are edited.
   After changing a build, run `Plans\sync-site.cmd`, then commit and push from
   `site\`, in the same pass, or the live site serves the old version silently.
-- If the repo is ever made public again, anything in `site\` is public the moment it is
+- The site is public. Anything you put in `site\` is public the moment it is
   pushed. Do not add anything else to that repo without asking the owner, and
   do not point a custom domain or change the repo's visibility on your own.

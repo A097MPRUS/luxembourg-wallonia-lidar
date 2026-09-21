@@ -169,18 +169,17 @@ The owner's rule, extended to this folder: **every change updates CHANGES.md
 with a detailed entry, and this HANDOFF if state changed, in the same pass.**
 Small changes count. A change log that lags is worth nothing.
 
-## 11. GitHub Pages: TAKEN OFFLINE 2026-09-21
+## 11. GitHub Pages: LIVE (republished 2026-09-21)
 
-**Current state:** the repo `A097MPRUS/luxembourg-wallonie-lidar` is PRIVATE
-and GitHub Pages is OFF. The owner asked for this on 2026-09-21 out of concern
-about the Esri World Imagery licence. The URL below no longer serves the site
-(fresh requests 404; GitHub's CDN may serve a cached front page for a few
-minutes after). Do NOT make the repo public or re-enable Pages without the
-owner asking. Before any republish, resolve the imagery question (swap Esri
-for the open geoportail.lu ortho layers, or confirm Esri's terms fit). The
-history below is kept for reference. See CHANGES.md C7.
+**Current state:** public repo, Pages on, live at
+https://a097mprus.github.io/luxembourg-wallonie-lidar/. On 2026-09-21 it was
+briefly made private and taken offline, which was a misreading: the owner had
+asked for that only IF the Esri imagery made it illegal, and it does not
+(standard tile use with attribution; not legal advice). Restored the same day.
+The Esri licence note under "Still open" below stays as an open decision.
+See CHANGES.md C7 and C8.
 
-### History: published 2026-09-20
+### Setup details (published 2026-09-20)
 
 The owner green-lit publishing on 2026-09-20 and chose GitHub Pages, public,
 under the A097MPRUS account. It is live.
