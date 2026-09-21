@@ -655,6 +655,17 @@ contain the new CC0 line and no "1967". Same results on the phone build.
 Builds: v2 2,348,671 bytes sha256 `92fe2b43...`; mobile 2,358,744 bytes
 `16020f91...`. `alpha/` still has 1967 and is marked superseded in HANDOFF.
 
+## Change set F - alpha folder removed (2026-09-21)
+
+**What.** `Planslpha\` moved to the Windows Recycle Bin (not permanently
+deleted, so it can be restored from there).
+
+**Why.** Owner: delete alpha only if its files were replaced into `tests\`.
+Checked first with a line diff of both builds: every alpha change is in
+`tests\`; the only differences are the two alpha markers and the change set E
+edits (1967 removal) that `tests\` has and alpha lacked. Nothing unique was
+lost. HANDOFF and AGENTS no longer mention the folder.
+
 ## Rebuild recipe (if the data ever needs regenerating)
 
 - Raw pulls: `work/*.overpass` files; responses in `work/*.json`.

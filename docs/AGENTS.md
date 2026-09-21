@@ -4,7 +4,7 @@ Read `HANDOFF.md` first, then `CHANGES.md`. Short version:
 
 - Two deliverables, both single self-contained HTML files, no build step, no
   backend. They live in `../tests/` and are the working builds (`../site/`
-  holds published copies, `../alpha/` a superseded review copy). Do not
+  holds published copies). Do not
   overwrite or delete them without the owner's approval.
 - Both builds share one JavaScript body and find every control by
   `getElementById`. Keep element ids identical across both files. Apply every

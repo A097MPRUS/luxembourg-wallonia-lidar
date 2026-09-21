@@ -43,10 +43,6 @@ C:\Users\User\.kun\default_workspace\Plans\
     serve-windows.cmd       double-click LAN server for phone testing
     allow-port-8000.cmd     one-time firewall helper (TCP 8000, private)
     RUINS-EXPANSION.md      change set A notes (totals superseded)
-  alpha\          the orthophoto alpha the owner reviewed on 2026-09-21. Now
-                  promoted into tests\. SUPERSEDED: it still offers Luxembourg's
-                  1967 photo, which was removed from tests\ in change set
-                  E. Do not promote it again. Safe to delete; ask first.
   claude\         this documentation folder (HANDOFF, CHANGES, AGENTS)
   site\           the published GitHub Pages site, a git repo (section 12)
                   index.html + COPIES of both builds + README + docs\
@@ -273,7 +269,6 @@ sources table in both builds, and update the table above.
   therefore not a dot; add by hand if the owner wants it.
 - Wallonia dots were not expanded beyond the bike overlay (owner asked for
   Luxembourg-only dot additions).
-- `alpha\` can be deleted once the owner agrees.
 
 ## 12. GitHub Pages site: LIVE
 
