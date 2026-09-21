@@ -8,69 +8,89 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
 <style>
-  :root{
-    --ground:#e9edf1; --panel:#ffffff; --sunk:#f3f6f9;
-    --ink:#10223a; --soft:#4d6076; --line:#d7e0e9;
-    --edge:#2f57d1; --accent:#1d49c4; --accent-soft:#e7eefc;
-    --shade:0 8px 26px rgba(12,28,48,.18), 0 1px 3px rgba(12,28,48,.12);
-    --r-lg:16px; --r-md:11px; --r-sm:8px;
-  }
-  @media (prefers-color-scheme:dark){
-    :root{
-      --ground:#070d15; --panel:#101b28; --sunk:#17242f;
-      --ink:#e8f0f8; --soft:#9fb2c6; --line:#263542;
-      --edge:#6f92ff; --accent:#9bb6ff; --accent-soft:#1a2a46;
-      --shade:0 8px 28px rgba(0,0,0,.55), 0 1px 3px rgba(0,0,0,.4);
-    }
-  }
-  *{box-sizing:border-box}
-  [hidden]{display:none !important}
-  body{
-    margin:0; background:var(--ground); color:var(--ink);
-    font:400 16px/1.6 "IBM Plex Sans",system-ui,sans-serif;
-    padding:env(safe-area-inset-top,0) 16px env(safe-area-inset-bottom,0);
-  }
-  .wrap{max-width:860px; margin:0 auto; padding:48px 0 64px}
-  header{margin-bottom:32px}
-  h1{font-size:30px; line-height:1.25; font-weight:700; margin:0 0 8px}
-  .sub{color:var(--soft); margin:0; max-width:60ch}
-  h2{font-size:19px; font-weight:600; margin:40px 0 12px}
-  p{max-width:70ch}
-  a{color:var(--accent)}
-  .card{
-    background:var(--panel); border:1px solid var(--line);
-    border-radius:var(--r-lg); box-shadow:var(--shade);
-    padding:24px; margin:28px 0;
-  }
-  .go{
-    display:inline-block; background:var(--accent); color:#fff;
-    text-decoration:none; font-weight:600; font-size:17px;
-    padding:13px 22px; border-radius:var(--r-md); border:1px solid var(--accent);
-  }
-  @media (prefers-color-scheme:dark){ .go{color:#07101f} }
-  .alt{margin:14px 0 0; color:var(--soft); font-size:14.5px}
-  .alt .item{display:inline-block; white-space:nowrap; margin-right:16px}
-  .rec{
-    display:inline-block; font:500 12px/1 "IBM Plex Mono",monospace;
-    color:var(--edge); background:var(--accent-soft);
-    border:1px solid var(--line); border-radius:var(--r-sm);
-    padding:4px 7px; margin-left:4px; vertical-align:2px;
-  }
-  table{border-collapse:collapse; width:100%; font-size:14.5px; margin:8px 0 0}
-  th,td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top}
-  th{font-weight:600; color:var(--soft); font-size:13px; text-transform:uppercase; letter-spacing:.04em}
-  td.n{font-family:"IBM Plex Mono",monospace; white-space:nowrap}
-  .sw{display:inline-block; width:12px; height:12px; border-radius:3px; border:1px solid var(--line); margin-right:8px; vertical-align:-1px}
-  .note{background:var(--sunk); border:1px solid var(--line); border-radius:var(--r-md); padding:16px 18px; font-size:14.5px}
-  .note p{margin:0 0 10px} .note p:last-child{margin:0}
-  code{font-family:"IBM Plex Mono",monospace; font-size:13.5px; background:var(--sunk); border:1px solid var(--line); border-radius:4px; padding:1px 5px}
-  ul{max-width:70ch; padding-left:20px} li{margin:5px 0}
+/* Information landing page. Approved redesign, 2026-09-21. */
+:root{
+ --ground:#e9edf1;--panel:#ffffff;--sunk:#f3f6f9;--ink:#10223a;
+ --soft:#4d6076;--line:#d7e0e9;--edge:#2f57d1;--accent:#1d49c4;
+ --accent-soft:#e7eefc;--highlight:rgba(255,255,255,.85);
+ --shade:0 16px 36px -20px rgba(12,28,48,.3),0 2px 5px rgba(12,28,48,.045);
+}
+@media(prefers-color-scheme:dark){:root{
+ --ground:#070d15;--panel:#101b28;--sunk:#142230;--ink:#e8f0f8;
+ --soft:#9fb2c6;--line:#263542;--edge:#6f92ff;--accent:#9bb6ff;
+ --accent-soft:#1a2a46;--highlight:rgba(232,240,248,.055);
+ --shade:0 20px 42px -18px rgba(0,0,0,.7),0 2px 5px rgba(0,0,0,.2);
+}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--ground);color:var(--ink);font:400 15px/1.65 "IBM Plex Sans",system-ui,sans-serif;padding:env(safe-area-inset-top,0) 24px env(safe-area-inset-bottom,0)}
+a{color:var(--accent);text-underline-offset:4px}
+a:focus-visible{outline:3px solid var(--edge);outline-offset:5px}
+.wrap{max-width:1120px;margin:auto;padding:30px 0 64px}
+
+
+.hero{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(290px,1fr);gap:42px;align-items:center;padding:10px 0 42px;border-bottom:1px solid var(--line);margin-bottom:34px}
+header{margin:0}
+.eyebrow{font:500 11px/1.5 "IBM Plex Mono",monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);margin:0 0 14px}
+h1{font-size:clamp(30px,3.3vw,44px);font-weight:600;line-height:1.13;letter-spacing:-.035em;margin:0 0 20px;max-width:16ch}
+.sub{color:var(--soft);margin:0;max-width:64ch;font-size:15px;line-height:1.8}
+.card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shade),inset 0 1px 0 var(--highlight);padding:30px}
+.card:before{content:"";position:absolute;top:-1px;left:30px;width:38px;height:3px;background:var(--edge)}
+.card-title{font-size:18px;font-weight:600;margin:0 0 5px}
+.card-description{font-size:13px;color:var(--soft);margin:0 0 23px}
+.go{display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--accent);color:#fff;padding:13px 17px;border:1px solid transparent;border-radius:7px;text-decoration:none;font-size:15px;font-weight:600;box-shadow:0 3px 0 rgba(0,0,0,.13)}
+.go svg{width:18px;height:18px;flex-shrink:0}
+.go:hover{filter:brightness(1.08)}
+@media(prefers-color-scheme:dark){.go{color:#07101f}}
+.alt{font-size:12px;color:var(--soft);margin:16px 0 0}
+.alt .item{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}
+.rec{font:10px/1.3 "IBM Plex Mono",monospace;color:var(--accent);background:var(--accent-soft);padding:3px 5px;border-radius:3px}
+.content-grid{display:grid;grid-template-columns:minmax(0,1.85fr) minmax(270px,1fr);gap:24px;align-items:start}
+.section{border:1px solid var(--line);background:var(--panel);border-radius:12px;box-shadow:var(--shade),inset 0 1px 0 var(--highlight);overflow:hidden;min-width:0}
+.section-head{display:flex;align-items:center;gap:12px;padding:21px 25px;border-bottom:1px solid var(--line)}
+.section-num{font:11px/1 "IBM Plex Mono",monospace;color:var(--soft);border:1px solid var(--line);padding:7px;border-radius:4px;background:var(--sunk)}
+h2{font-size:18px;font-weight:600;letter-spacing:-.02em;margin:0}
+table{border-collapse:collapse;width:100%;font-size:13px;margin:0}
+th,td{text-align:left;vertical-align:top;padding:14px 24px;border-bottom:1px solid var(--line)}
+th{background:var(--sunk);color:var(--soft);font:500 10px/1.5 "IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.07em;padding-top:11px;padding-bottom:11px}
+td:first-child{font-weight:500}
+td:nth-child(2){color:var(--soft)}
+td.n{font:500 13px/1.6 "IBM Plex Mono",monospace;color:var(--ink)}
+tr:last-child td{border-bottom:0}
+.layers td:first-child{width:27%;padding-right:8px}
+.layers td:nth-child(2){padding-left:14px}
+.layers tr:nth-child(2n+1) td{background:var(--sunk)}
+.counts td{padding:12px 20px}
+.counts td:first-child{white-space:nowrap}
+.counts td.n{text-align:right;font-size:15px;letter-spacing:-.03em}
+.counts th{padding-left:20px;padding-right:20px}
+.counts th:last-child{text-align:right}
+.sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:10px;vertical-align:1px;box-shadow:0 0 0 3px var(--sunk)}
+.counts .alt{padding:17px 20px;margin:0;border-top:1px solid var(--line);background:var(--sunk);font-size:12px;line-height:1.7}
+.sources{grid-column:1/-1}
+.sources td:first-child{width:32%;padding-right:24px}
+.sources td{padding-top:17px;padding-bottom:17px}
+.sources tbody tr:hover td{background:var(--sunk)}
+.how{grid-column:1/-1}
+.how-body{display:grid;grid-template-columns:1fr 1fr;gap:30px;padding:26px}
+ul{margin:0;padding:0;list-style:none}
+li{padding:0 0 16px 23px;position:relative;color:var(--soft);font-size:13px}
+li:before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;border:1px solid var(--soft)}
+li:last-child{padding-bottom:0}
+.note{background:var(--sunk);border:1px solid var(--line);border-radius:7px;padding:18px;font-size:12px;color:var(--soft)}
+.note strong{color:var(--ink);display:block;font-size:13px;margin-bottom:4px;font-weight:500}
+.note p{margin:0 0 17px}.note p:last-child{margin:0}
+
+@media(max-width:900px){.hero{grid-template-columns:1.2fr 1fr;gap:25px}.card{padding:24px}.content-grid{grid-template-columns:1fr}.counts{grid-column:auto}.sources,.how{grid-column:auto}.counts td:first-child{width:70%}h1{font-size:36px}.how-body{gap:24px}}
+@media(max-width:600px){body{padding-left:16px;padding-right:16px}.wrap{padding-top:18px}.hero{grid-template-columns:1fr;gap:26px;padding-bottom:28px;margin-bottom:24px}h1{font-size:36px;max-width:18ch;margin-bottom:16px}.sub{font-size:14px}.eyebrow{margin-bottom:10px}.card{padding:23px}.alt{display:flex;flex-wrap:wrap;gap:8px 20px}.alt .item{justify-content:flex-start}.section-head{padding:17px}.content-grid{gap:20px}th,td{padding:12px 16px}.layers td:first-child{width:31%;font-size:12px}.layers td:nth-child(2){padding-left:10px;font-size:12px}.sources table,.sources tbody,.sources tr,.sources td{display:block}.sources th{display:none}.sources tr{padding:16px;border-bottom:1px solid var(--line)}.sources tr:first-child{display:none}.sources tr:last-child{border-bottom:0}.sources td{width:100%!important;padding:0!important;border:0}.sources td:first-child{margin-bottom:7px;color:var(--ink)}.how-body{grid-template-columns:1fr;padding:20px;gap:20px}.counts .alt{display:block}.go{padding:14px 17px}}
 </style>
 </head>
 <body>
 <div class="wrap">
+  <div class="hero">
 
   <header>
+    <p class="eyebrow">Explore the landscape</p>
     <h1>Luxembourg &amp; Wallonia LiDAR</h1>
     <p class="sub">Shaded relief from the Luxembourg and Walloon national LiDAR surveys, next to the
     governments' own aerial photos, behind a draggable swipe divider. Built for finding ruined and abandoned structures,
@@ -78,14 +98,18 @@
   </header>
 
   <div class="card">
-    <a class="go" id="go" href="luxembourg-wallonia-lidar-v2.html">Open the map</a>
+    <p class="card-title">See what lies beneath.</p>
+    <p class="card-description">Compare relief, imagery and mapped sites.</p>
+    <a class="go" id="go" href="luxembourg-wallonia-lidar-v2.html">Open the map<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 12h15M13 5l7 7-7 7"/></svg></a>
     <p class="alt">
       <span class="item"><a href="luxembourg-wallonia-lidar-v2.html">Desktop build</a><span class="rec" id="recD" hidden>recommended</span></span>
       <span class="item"><a href="luxembourg-wallonia-lidar-mobile.html?v=8ca5d808">Phone build</a><span class="rec" id="recM" hidden>recommended</span></span>
     </p>
   </div>
 
-  <h2>What it shows</h2>
+  </div>
+  <div class="content-grid">
+  <section class="section layers"><div class="section-head"><span class="section-num" aria-hidden="true">01</span><h2>What it shows</h2></div>
   <table>
     <tr><th>Layer</th><th>Detail</th></tr>
     <tr><td>Relief</td><td>Terrain (DTM), Surface (DSM), and Above ground (DSM minus DTM, computed in the browser). 50 cm raster in both territories.</td></tr>
@@ -98,7 +122,8 @@
     <tr><td>Tools</td><td>Coordinate and address search, elevation readout, Scan (beta), four languages.</td></tr>
   </table>
 
-  <h2>Point counts</h2>
+  </section>
+  <section class="section counts"><div class="section-head"><span class="section-num" aria-hidden="true">02</span><h2>Point counts</h2></div>
   <table>
     <tr><th>Kind</th><th>Count</th></tr>
     <tr><td><span class="sw" style="background:#d1495b"></span>Ruins</td><td class="n">1,348</td></tr>
@@ -112,7 +137,8 @@
   <p class="alt">Luxembourg 2,162 points, Wallonia 6,316. All from OpenStreetMap, pulled 2026-09-20.
   Disused and Brownfield are off by default.</p>
 
-  <h2>Data sources</h2>
+  </section>
+  <section class="section sources"><div class="section-head"><span class="section-num" aria-hidden="true">03</span><h2>Data sources</h2></div>
   <table>
     <tr><th>Source</th><th>Used for</th></tr>
     <tr><td>Administration du cadastre et de la topographie (ACT), geoportail.lu</td><td>Luxembourg relief, flown February 2019, 15 points per square metre, 50 cm raster. Cadastral buildings. Aerial photos from 2001 and 2025 (summer and winter), public domain (CC0).</td></tr>
@@ -122,7 +148,8 @@
     <tr><td>Leaflet 1.9.4</td><td>The only library. Loaded from cdnjs.</td></tr>
   </table>
 
-  <h2>How it works</h2>
+  </section>
+  <section class="section how"><div class="section-head"><span class="section-num" aria-hidden="true">04</span><h2>How it works</h2></div><div class="how-body">
   <ul>
     <li>Each build is one self contained HTML file. No server, no build step, no database, no accounts, no API keys.</li>
     <li>Every map layer comes from a public body or from OpenStreetMap. No commercial imagery is used.</li>
@@ -138,6 +165,8 @@
     no cadastral footprint. It saturates under closed canopy and it is not a survey instrument.</p>
   </div>
 
+  </div></section>
+  </div>
 </div>
 <script>
 (function(){
