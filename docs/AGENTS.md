@@ -5,8 +5,8 @@ Short rules for anyone, human or agent, editing the map in this repository.
 ## The builds
 
 - Two deliverables, both single self-contained HTML files, no build step, no
-  backend: `luxembourg-wallonie-lidar-v2.html` (desktop) and
-  `luxembourg-wallonie-lidar-mobile.html` (phone). Do not overwrite or delete
+  backend: `luxembourg-wallonia-lidar-v2.html` (desktop) and
+  `luxembourg-wallonia-lidar-mobile.html` (phone). Do not overwrite or delete
   them without the owner's approval.
 - Both builds share one JavaScript body and find every control by
   `getElementById`. Keep element ids identical across both files. Apply every
@@ -77,7 +77,7 @@ icons, no scroll animations, no invented metrics.
 ## Publishing
 
 - This repository is public and serves the site through GitHub Pages at
-  https://a097mprus.github.io/luxembourg-wallonie-lidar/. Anything pushed here
+  https://a097mprus.github.io/luxembourg-wallonia-lidar/. Anything pushed here
   is public at once.
 - Do not add anything else to the repository without asking the owner, and do
   not point a custom domain at it or change its visibility on your own.

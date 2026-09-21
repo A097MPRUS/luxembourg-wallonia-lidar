@@ -5,14 +5,14 @@ shaded relief derived from the two national LiDAR surveys next to the government
 photos, split by a draggable swipe divider, for finding ruined and abandoned structures, especially under forest
 canopy where aerial imagery shows nothing but treetops.
 
-Live site: **https://a097mprus.github.io/luxembourg-wallonie-lidar/**
+Live site: **https://a097mprus.github.io/luxembourg-wallonia-lidar/**
 
 ## Builds
 
 | File | For |
 | --- | --- |
-| `luxembourg-wallonie-lidar-v2.html` | Desktop |
-| `luxembourg-wallonie-lidar-mobile.html` | Phone, icon rail chrome |
+| `luxembourg-wallonia-lidar-v2.html` | Desktop |
+| `luxembourg-wallonia-lidar-mobile.html` | Phone, icon rail chrome |
 
 Each build is a **single self contained HTML file**. No server, no build step, no database, no
 package manager, no accounts, no API keys. Open the file directly, or serve the folder:
