@@ -53,6 +53,6 @@ Read `HANDOFF.md` first, then `CHANGES.md`. Short version:
   `site\` holds COPIES of the builds. `tests\` is still where they are edited.
   After changing a build, run `Plans\sync-site.cmd`, then commit and push from
   `site\`, in the same pass, or the live site serves the old version silently.
-- The site is public. Anything you put in `site\` is public the moment it is
+- If the repo is ever made public again, anything in `site\` is public the moment it is
   pushed. Do not add anything else to that repo without asking the owner, and
   do not point a custom domain or change the repo's visibility on your own.
