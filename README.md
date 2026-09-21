@@ -94,8 +94,8 @@ session only.
 - **Scan is beta.** It differences the surface and terrain hillshades, thresholds, labels connected
   components, then filters on size, aspect, rectangularity and interior smoothness. It saturates
   under closed canopy, because the canopy itself is above ground. It is not a survey instrument.
-- **Automatic building detection has already hit four dead ends**, all measured. Read section 6 of
-  [docs/HANDOFF.md](docs/HANDOFF.md) and the original handoff before trying again. The short version:
+- **Automatic building detection has already hit four dead ends**, all measured. Read the project's
+  handoff notes before trying again. The short version:
   neither provider publishes raw elevation over the web, hillshade edge detection fails because a
   single sun azimuth hides walls parallel to the light, and Luxembourg's forest floor is full of
   rectilinear earthworks that swamp any heuristic.
@@ -109,7 +109,6 @@ session only.
 
 | File | Contents |
 | --- | --- |
-| [docs/HANDOFF.md](docs/HANDOFF.md) | Current state, data facts, colour chart, open items. |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | File shape, the element id contract, pane z-order, data schema, how to regenerate the data. |
 | [docs/CHANGES.md](docs/CHANGES.md) | Every change, with evidence. |
 | [docs/AGENTS.md](docs/AGENTS.md) | Working rules for anyone, human or agent, editing the builds. |
