@@ -1289,6 +1289,141 @@ input[type=range]{height:22px}
 .legal-body > *{max-width:none}
 .legal-body h2{font-size:18px}
 .legal-body h3{font-size:14px}
+
+/* ================= panel refresh v4 (2026-09-21) =================
+   Structural redesign of the Layers panel, both builds: section bars with
+   icons (desktop: collapsible accordion), tile pickers, control rows, dark
+   instrument surface. Removable in one step: delete this block, the desktop
+   accordion script near </body> and the two SVG swaps. */
+#panel{
+  --px-bg:#121922; --px-inset:#0d131b; --px-line:rgba(255,255,255,.10);
+  --px-ink:#e9f1f8; --px-ink2:#a9bacb; --px-ink3:#8fa1b4;
+  --px-accent:#4fe0c8; --px-accent-soft:rgba(79,224,200,.13);
+  background:var(--px-bg); color:var(--px-ink); border-color:var(--px-line);
+  box-shadow:0 20px 48px rgba(4,9,15,.5); }
+#panel .panel-head{ padding:13px 15px; gap:10px; }
+#panel .panel-head > svg:first-of-type{
+  box-sizing:content-box; padding:7px; border-radius:9px;
+  color:var(--px-accent); background:color-mix(in srgb, var(--px-accent) 13%, transparent); }
+#panel .panel-head .ttl{ color:var(--px-ink); }
+#panel .panel-head .caret{ color:var(--px-ink3); }
+#panel .panel-head:hover .ttl{ color:#fff; }
+#panel.open .panel-head{ border-bottom-color:var(--px-line); }
+#panel .panel-body{ padding:10px 15px 15px; }
+#panel .panel-body::-webkit-scrollbar{ width:10px; }
+#panel .panel-body::-webkit-scrollbar-track{ background:transparent; }
+#panel .panel-body::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.16); border-radius:5px; border:3px solid var(--px-bg); }
+/* ---- section bars ---- */
+#panel .grp{ gap:8px; }
+#panel .grp + .grp{ margin-top:12px; border-top:0; padding-top:0; }
+#panel .grp > .lbl:first-child{
+  display:flex; align-items:center; gap:9px; padding:9px 11px; margin:0 0 1px;
+  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.07);
+  border-radius:8px; color:var(--px-ink2); font-size:10.5px; letter-spacing:.11em; }
+#panel .grp > .lbl:first-child::before{
+  content:""; width:15px; height:15px; flex:0 0 auto; opacity:.95;
+  background-repeat:no-repeat; background-position:center; background-size:15px 15px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='2.2' fill='%239fb0c3'/%3E%3C/svg%3E"); }
+#panel #layerGrp > .lbl::before{ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 16 16' fill='none' stroke='%239fb0c3' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1.8 12.4l3.5-4.9 2.4 3.2 1.9-2.4 4.6 4.1'/%3E%3C/svg%3E"); }
+#panel #imgGrp > .lbl::before{ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 16 16' fill='none' stroke='%239fb0c3' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='4.8' width='12' height='8.4' rx='1.6'/%3E%3Ccircle cx='8' cy='9' r='2.3'/%3E%3C/svg%3E"); }
+#panel .grp:has(> #ovLbl) > .lbl::before{ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 16 16' fill='none' stroke='%239fb0c3' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1.8 8s2.4-4.2 6.2-4.2S14.2 8 14.2 8s-2.4 4.2-6.2 4.2S1.8 8 1.8 8z'/%3E%3Ccircle cx='8' cy='8' r='1.8'/%3E%3C/svg%3E"); }
+#panel .grp:has(> #toolsLbl) > .lbl::before{ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 16 16' fill='none' stroke='%239fb0c3' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 2.4l1.15 3.1 3.1 1.15-3.1 1.15L8 10.9 6.85 7.8 3.75 6.65 6.85 5.5z'/%3E%3Cpath d='M12.6 11.2v2.4M11.4 12.4h2.4'/%3E%3C/svg%3E"); }
+#panel .grp:has(> #sitesLbl) > .lbl::before{ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 16 16' fill='none' stroke='%239fb0c3' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 14s4.4-4.3 4.4-7.1A4.4 4.4 0 0 0 3.6 6.9C3.6 9.7 8 14 8 14z'/%3E%3Ccircle cx='8' cy='6.9' r='1.6'/%3E%3C/svg%3E"); }
+body:not(:has(#rail)) #panel .grp > .lbl:first-child{ cursor:pointer; }
+body:not(:has(#rail)) #panel .grp > .lbl:first-child:hover{ background:rgba(255,255,255,.08); }
+body:not(:has(#rail)) #panel .grp > .lbl:first-child::after{
+  content:""; width:6px; height:6px; margin-left:auto; flex:0 0 auto;
+  border-right:1.6px solid #78899c; border-bottom:1.6px solid #78899c;
+  transform:rotate(45deg) translateY(-1px); transition:transform .15s ease; }
+body:not(:has(#rail)) #panel .grp.collapsed > .lbl:first-child::after{
+  transform:rotate(-45deg) translateY(-1px); }
+body:not(:has(#rail)) #panel .grp.collapsed > :not(.lbl){ display:none; }
+/* ---- tile pickers ---- */
+#panel #layerGrp, #panel #imgGrp{ display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+#panel #layerGrp > .lbl, #panel #imgGrp > .lbl{ grid-column:1 / -1; }
+#panel .opt{ position:relative; display:flex; flex-direction:column; align-items:flex-start;
+  gap:3px; min-height:60px; padding:9px 10px 8px; border:1px solid var(--px-line);
+  border-radius:9px; background:rgba(255,255,255,.03); color:var(--px-ink); }
+#panel .opt:hover{ background:rgba(255,255,255,.06); }
+#panel .opt input{ position:absolute; top:8px; right:8px; margin:0; width:14px; height:14px;
+  transform:none; accent-color:var(--px-accent); }
+#panel .opt .on{ font-size:12.5px; line-height:1.25; padding-right:20px; }
+#panel .opt .yr{ margin:auto 0 0; font-size:10px; color:var(--px-ink3);
+  border:1px solid var(--px-line); border-radius:6px; padding:2px 7px;
+  background:rgba(255,255,255,.035); }
+#panel .opt:has(input:checked){ background:var(--px-accent-soft);
+  border-color:color-mix(in srgb, var(--px-accent) 42%, transparent); box-shadow:none; }
+#panel .opt input:focus-visible{ outline:2px solid var(--px-accent); outline-offset:2px; }
+/* ---- control rows ---- */
+#panel .switch{ border:1px solid var(--px-line); border-radius:8px; padding:9px 11px;
+  background:rgba(255,255,255,.02); min-height:0; gap:10px; color:var(--px-ink); }
+#panel .switch:hover{ background:rgba(255,255,255,.05); }
+#panel .switch input[type=checkbox]{
+  appearance:none; -webkit-appearance:none; width:17px; height:17px; margin:0; flex:0 0 auto;
+  border:1.5px solid rgba(255,255,255,.28); border-radius:5px; background:var(--px-inset);
+  cursor:pointer; transition:background-color .12s ease, border-color .12s ease; }
+#panel .switch input[type=checkbox]:hover{ border-color:var(--px-accent); }
+#panel .switch input[type=checkbox]:checked{
+  background:var(--px-accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.6 8.4l3 3 5.8-6.8' fill='none' stroke='%230d131b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/11px 11px no-repeat;
+  border-color:var(--px-accent); }
+#panel .switch input[type=checkbox]:focus-visible{ outline:2px solid var(--px-accent); outline-offset:2px; }
+#panel .row .v{ color:var(--px-ink2); background:rgba(255,255,255,.05);
+  border:1px solid var(--px-line); border-radius:6px; padding:1px 6px; }
+#panel input[type=range]{ -webkit-appearance:none; appearance:none; height:24px; background:transparent; }
+#panel input[type=range]::-webkit-slider-runnable-track{
+  height:4px; border-radius:2px; background:rgba(255,255,255,.16); }
+#panel input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none; appearance:none; width:14px; height:14px; margin-top:-5px;
+  border-radius:50%; background:var(--px-accent); border:2px solid var(--px-bg);
+  box-shadow:0 0 0 1px rgba(79,224,200,.4); cursor:pointer; }
+#panel input[type=range]::-moz-range-track{
+  height:4px; border-radius:2px; background:rgba(255,255,255,.16); }
+#panel input[type=range]::-moz-range-thumb{
+  width:12px; height:12px; border-radius:50%; background:var(--px-accent);
+  border:2px solid var(--px-bg); box-shadow:0 0 0 1px rgba(79,224,200,.4); cursor:pointer; }
+#panel input[type=range]:focus-visible{ outline:2px solid var(--px-accent); outline-offset:3px; border-radius:6px; }
+#panel .legend{ display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-top:2px; }
+#panel .lg{ padding:8px 10px; border-radius:8px; border:1px solid var(--px-line); gap:8px;
+  background:rgba(255,255,255,.03); font-size:12px; color:var(--px-ink2); }
+#panel .lg:hover{ border-color:color-mix(in srgb, var(--px-accent) 45%, var(--px-line)); }
+#panel .lg[aria-pressed="true"]{ background:var(--px-accent-soft);
+  border-color:color-mix(in srgb, var(--px-accent) 35%, transparent); color:var(--px-ink); }
+#panel .lg[aria-pressed="false"]{ opacity:1; }
+#panel .lg[aria-pressed="false"] i{ opacity:.45; }
+#panel .lg i{ width:11px; height:11px; border-radius:50%;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.25); }
+#panel .chips{ gap:6px; }
+#panel .chip{ padding:8px 12px; border-radius:8px; font-size:12.5px;
+  background:rgba(255,255,255,.03); border:1px solid var(--px-line); color:var(--px-ink2); }
+#panel .chip:hover{ background:var(--px-accent-soft);
+  border-color:color-mix(in srgb, var(--px-accent) 50%, transparent); color:var(--px-ink); }
+#panel .tool-btn{ border-radius:8px; padding:10px 12px; border:1px solid var(--px-line);
+  background:rgba(255,255,255,.04); color:var(--px-ink); }
+#panel .tool-btn:hover:not(:disabled){ background:var(--px-accent-soft);
+  border-color:color-mix(in srgb, var(--px-accent) 50%, transparent); color:var(--px-ink); }
+#panel .tool-btn .beta{ color:var(--px-ink3); }
+#panel .tool-mini{ border-radius:8px; border:1px solid var(--px-line);
+  background:transparent; color:var(--px-ink2); }
+#panel .tool-mini:hover{ border-color:var(--px-accent); color:var(--px-ink); }
+#panel .tool-out{ color:var(--px-ink2); }
+#panel .finder{ border-radius:9px; background:var(--px-inset); border-color:var(--px-line); }
+#panel .finder-row svg{ color:var(--px-ink3); }
+#panel .finder input{ color:var(--px-ink); }
+#panel .finder input::placeholder{ color:var(--px-ink3); }
+#panel .finder:focus-within{ border-color:var(--px-accent); }
+#panel .go{ border-radius:7px; background:var(--px-accent); border:1px solid var(--px-accent);
+  color:#0d131b; font-weight:600; }
+#panel .go:hover{ background:color-mix(in srgb, var(--px-accent) 88%, #fff); }
+#panel .hits{ background:var(--px-inset); border:1px solid var(--px-line); border-radius:8px; }
+#panel .hit{ color:var(--px-ink2); }
+#panel .hit:hover{ background:rgba(255,255,255,.05); }
+#panel .hint{ color:var(--px-ink3); }
+#panel .finder-msg{ color:var(--px-ink2); }
+#panel .finder-msg.bad{ color:#ff8b73; }
+body:not(:has(#rail)) #panel{ width:288px; }
+/* ================= end panel refresh v4 ================= */
+
 </style>
 </head>
 <body>
@@ -1430,11 +1565,10 @@ input[type=range]{height:22px}
             <span class="lbl" id="toolsLbl">Tools</span>
             <div class="tool-row">
               <button type="button" class="tool-btn" id="scanBtn">
-                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.6"/>
-                  <path d="M8 1.2v2M8 12.8v2M1.2 8h2M12.8 8h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                  <path d="M3.5 3.5a6.4 6.4 0 0 1 9 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                </svg>
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M5.4 1.9H3.7A1.8 1.8 0 0 0 1.9 3.7v1.7M10.6 1.9h1.7a1.8 1.8 0 0 1 1.8 1.8v1.7M14.1 10.6v1.7a1.8 1.8 0 0 1-1.8 1.8h-1.7M5.4 14.1H3.7a1.8 1.8 0 0 1-1.8-1.8v-1.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="8" cy="8" r="1.9" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
                 <span id="scanBtnLbl">Scan this view</span><span class="beta">beta</span>
               </button>
               <button type="button" class="tool-mini" id="scanClear">Clear</button>
