@@ -103,7 +103,7 @@ li:last-child{padding-bottom:0}
     <a class="go" id="go" href="luxembourg-wallonia-lidar-v2.html">Open the map<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 12h15M13 5l7 7-7 7"/></svg></a>
     <p class="alt">
       <span class="item"><a href="luxembourg-wallonia-lidar-v2.html">Desktop build</a><span class="rec" id="recD" hidden>recommended</span></span>
-      <span class="item"><a href="luxembourg-wallonia-lidar-mobile.html?v=8ca5d808">Phone build</a><span class="rec" id="recM" hidden>recommended</span></span>
+      <span class="item"><a href="luxembourg-wallonia-lidar-mobile.html?v=e944fbcf">Phone build</a><span class="rec" id="recM" hidden>recommended</span></span>
     </p>
   </div>
 
@@ -172,7 +172,7 @@ li:last-child{padding-bottom:0}
 (function(){
   var phone = window.matchMedia("(pointer:coarse)").matches && Math.min(window.innerWidth, window.innerHeight) < 900;
   var go = document.getElementById("go");
-  if (phone) go.setAttribute("href", "luxembourg-wallonia-lidar-mobile.html?v=8ca5d808");
+  if (phone) go.setAttribute("href", "luxembourg-wallonia-lidar-mobile.html?v=e944fbcf");
   document.getElementById(phone ? "recM" : "recD").hidden = false;
 })();
 </script>
