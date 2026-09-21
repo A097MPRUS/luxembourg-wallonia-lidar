@@ -112,13 +112,3 @@ session only.
 | File | Contents |
 | --- | --- |
 | [docs/AGENTS.md](docs/AGENTS.md) | Working rules for anyone, human or agent, editing the builds. |
-
-## Working on it
-
-The two builds share one JavaScript body and resolve every control through `getElementById`, so
-**element ids must stay identical across both files**, and changes apply to both unless they are
-genuinely layout only. See `docs/AGENTS.md` before editing.
-
-The builds in this repository are copies. The working builds live in `Plans\tests\` on the owner's
-machine. After changing one, run `sync-site.cmd` in `Plans\` to refresh the copies here, then
-commit and push.
