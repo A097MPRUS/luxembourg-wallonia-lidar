@@ -3,14 +3,21 @@
 Read `HANDOFF.md` first, then `CHANGES.md`. Short version:
 
 - Two deliverables, both single self-contained HTML files, no build step, no
-  backend. They live in `../tests/` and are now the only builds (the older
-  copies in the parent folder were deleted on 2026-09-20 at the owner's
-  request). Do not overwrite or delete them without the owner's approval.
+  backend. They live in `../tests/` and are the working builds (`../site/`
+  holds published copies, `../alpha/` a superseded review copy). Do not
+  overwrite or delete them without the owner's approval.
 - Both builds share one JavaScript body and find every control by
   `getElementById`. Keep element ids identical across both files. Apply every
   change to both unless it is genuinely layout-only.
 - New ids added on 2026-09-20: `bikes`, `bikesLbl`, `bikeHint`, `bikedata`.
+  New ids added on 2026-09-21: `imgGrp` (aerial photo picker) and its
+  generated radios `im-summer`, `im-leafoff`, `im-y2001`, `im-y1970`.
   Keep them in both builds or remove them from both.
+- **No commercial imagery.** Esri World Imagery was removed on 2026-09-21 at
+  the owner's request. Every layer must come from a public body (ACT, SPW) or
+  OpenStreetMap. Do not add Esri, Google, Bing, Mapbox or similar. Before
+  adding any year or source, check its licence at the source and its coverage
+  across the whole territory (HANDOFF section 8); SPW has partial campaigns.
 - No API keys, no env vars, no backend, no cookies set by the page. Do not add
   a secrets manager, a `.env`, or a cookie banner. This has been verified.
 - Only dependency is Leaflet 1.9.4 from cdnjs. Keep it that way. Its CSS is

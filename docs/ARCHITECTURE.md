@@ -1,5 +1,9 @@
 # Architecture
 
+> Updated 2026-09-21: the aerial imagery is now the ACT and SPW orthophotos (Esri World
+> Imagery removed), with a picker in `#imgGrp`. The current state of the project is in
+> `../claude/HANDOFF.md`; section 8 there covers the imagery in full.
+
 ## File shape
 
 Each build is one HTML document in this order:
@@ -34,7 +38,7 @@ The IIFE resolves these by `getElementById`. Both builds must provide all of the
 ```
 app  map  swipe  knob  tagL  tagR
 pill  pillFlag  pillName  langBtn  langCode  regionMenu  langMenu
-panel  panelHead  panelTitle  panelBody  layerGrp
+panel  panelHead  panelTitle  panelBody  layerGrp  imgGrp
 opacity  opVal  opLbl  mono  monoLbl  places  placesLbl
 ovLbl  buildings  buildingsLbl  ovOpacity  ovOpVal  ovOpLbl
 ruins  ruinsLbl  ruinsHint  legend
@@ -54,7 +58,7 @@ Mobile adds `rail`, `railLegal`, `botbar` and the rail labels `rbLayers`, `rbOve
 
 ```
 tilePane   200   relief (the monochrome CSS filter is applied to this pane)
-sat        350   aerial imagery, clipped to the right of the divider
+sat        350   government aerial photos (ACT WMTS / SPW WMS), clipped to the right of the divider
 build      420   cadastral footprints
 mask       480   the outside-the-territory mask plus border outlines
 places     520   settlement labels
@@ -120,6 +124,8 @@ Use a venv; shapely and numpy are not in the system Python on this machine.
 | `Wmts` | `L.TileLayer` subclass that zero-pads `{z}` to two digits for geoportail.lu. |
 | `ArcGisDyn` | `L.TileLayer` subclass building ArcGIS `export` URLs per tile bbox. |
 | `Ndsm` | `L.GridLayer` that loads the DTM and DSM tiles and paints their difference to a canvas. |
+| `luOrtho(id)` / `walOrtho(svc, png)` | ACT orthophoto WMTS layer / SPW orthophoto WMS layer, both in pane `sat`. |
+| `setImagery(id)` / `buildImagery()` | Swap the aerial photo per the `IMAGERY` table and region; render the picker into `#imgGrp`. |
 | `inTerritory(lng, lat, polys)` | Even-odd ray cast across all rings. Used for masking, region routing and the elevation source choice. |
 | `drawMask(key)` | Builds the world-with-holes mask and the border outlines. |
 | `drawShapes()` | Draws the condition-coloured OSM building outlines from `DATA.shapes`. |

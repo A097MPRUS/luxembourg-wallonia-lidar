@@ -1,4 +1,4 @@
-<!-- Luxembourg & Wallonia LiDAR, version 2, built 2026-09-20 -->
+<!-- Luxembourg & Wallonia LiDAR, version 2, built 2026-09-20; 2026-09-21: government orthophotos replace the commercial imagery -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -1226,6 +1226,7 @@ input[type=range]{width:100%; accent-color:var(--accent)}
       </button>
       <div class="panel-body" id="panelBody">
         <div class="grp" id="layerGrp"></div>
+        <div class="grp" id="imgGrp"></div>
         <div class="grp">
           <div class="row"><span class="lbl" id="opLbl">Relief opacity</span><span class="v" id="opVal">100%</span></div>
           <input type="range" id="opacity" min="20" max="100" value="100" step="5" aria-labelledby="opLbl">
@@ -1314,10 +1315,9 @@ input[type=range]{width:100%; accent-color:var(--accent)}
   looking at. The publisher of this file does not see any of it.</p>
   <ul>
     <li><b>ACT, Administration du cadastre et de la topographie</b>
-      (<code>wmts1-4.geoportail.lu</code>): LiDAR relief tiles for Luxembourg.</li>
+      (<code>wmts1-4.geoportail.lu</code>): LiDAR relief tiles and aerial photos for Luxembourg.</li>
     <li><b>SPW, Service public de Wallonie</b> (<code>geoservices.wallonie.be</code>):
-      LiDAR relief images for Wallonia, and elevation lookups.</li>
-    <li><b>Esri</b> (<code>server.arcgisonline.com</code>): aerial imagery tiles.</li>
+      LiDAR relief images and aerial photos for Wallonia, and elevation lookups.</li>
     <li><b>Open-Meteo</b> (<code>api.open-meteo.com</code>): elevation lookups for Luxembourg.</li>
     <li><b>Nominatim, OpenStreetMap</b> (<code>nominatim.openstreetmap.org</code>): address search.
       Only contacted when what you type is neither a coordinate nor one of the towns stored in this
@@ -1358,9 +1358,12 @@ input[type=range]{width:100%; accent-color:var(--accent)}
   <ul>
     <li><b>Luxembourg relief</b>: ACT, published as open data through geoportail.lu. Attribution required.</li>
     <li><b>Wallonia relief</b>: SPW, published through geoportail.wallonie.be. Attribution required.</li>
-    <li><b>Aerial imagery</b>: Esri World Imagery, together with Maxar and Earthstar Geographics.
-      This is <b>not</b> open data. It is served under Esri's terms of use, which restrict
-      redistribution, bulk downloading and offline caching. Check those terms before reusing any image.</li>
+    <li><b>Aerial photos, Luxembourg</b>: ACT orthophotos. The 2001 and 2025 editions are published
+      on data.public.lu under CC0, which places them in the public domain. The 1967 edition is
+      published there by ACT without a stated licence. All are credited.</li>
+    <li><b>Aerial photos, Wallonia</b>: SPW orthophotos, shown through SPW's web viewing services,
+      which SPW lets anyone use free of charge. The source must stay credited, the images must not
+      be altered, and the services must not be overloaded.</li>
     <li><b>Place names and boundaries</b>: OpenStreetMap contributors, under the Open Database
       Licence 1.0. Attribution is required, and a derived database must be shared under the same licence.</li>
   </ul>
@@ -1428,7 +1431,7 @@ input[type=range]{width:100%; accent-color:var(--accent)}
   </div>
   <p>It is flagged <code>HttpOnly</code> and <code>Secure</code>, carries no identifier that tracks
   you across sites, and exists only to route requests. The other services used by the map
-  (geoportail.lu, Esri, Open-Meteo, Cloudflare and Google Fonts) set no cookies when the map
+  (geoportail.lu, Open-Meteo, Cloudflare and Google Fonts) set no cookies when the map
   requests tiles, fonts or scripts.</p>
 
   <h3>Why there is no consent banner</h3>
@@ -1458,8 +1461,10 @@ input[type=range]{width:100%; accent-color:var(--accent)}
             <td class="num">2021-2022</td><td class="num">50 cm raster</td></tr>
         <tr><td>Wallonia DTM, older</td><td>SPW, geoportail.wallonie.be</td>
             <td class="num">2013-2014</td><td class="num">50 cm raster</td></tr>
-        <tr><td>Aerial imagery</td><td>Esri, Maxar, Earthstar Geographics</td>
-            <td class="num">varies</td><td class="num">native to zoom 19</td></tr>
+        <tr><td>Aerial photos, Luxembourg</td><td>ACT, geoportail.lu</td>
+            <td class="num">1967, 2001, 2025</td><td class="num">varies by year</td></tr>
+        <tr><td>Aerial photos, Wallonia</td><td>SPW, geoportail.wallonie.be</td>
+            <td class="num">1971, 2001-2003, 2023, 2026</td><td class="num">varies by year</td></tr>
         <tr><td>Altitude, Luxembourg</td><td>Open-Meteo, Copernicus DEM GLO-90</td>
             <td class="num">2021 release</td><td class="num">90 m</td></tr>
         <tr><td>Altitude, Wallonia</td><td>SPW terrain model query</td>
@@ -1552,16 +1557,16 @@ input[type=range]{width:100%; accent-color:var(--accent)}
   /* ---------------- i18n ---------------- */
   var T = {
     en:{cadcolour:"Cadastre colours",fphint:"Outlines from the official cadastre. They record where buildings exist, not their condition. Nothing here marks a building as abandoned.",tools:"Tools",scanbtn:"Scan this view",scanrun:"Scanning the visible tiles...",scanzoom:"Zoom in to about 200 m across, then scan",scanfail:"Tiles could not be read",scanfound:"structures",scanunmapped:"not in the cadastre",scannone:"No structures found here",scanknown:"in cadastre",scannew:"not in cadastre",scanhint:"Red boxes are structures with no cadastral footprint. Unreliable under closed canopy, where the treetops count as above ground.",fpstrength:"Footprint strength",above:"Above ground",overlays:"Overlays",footprints:"Building footprints",ruinlayer:"Ruins and abandoned",ruinhint:"From OpenStreetMap contributors. Buildings tagged ruined, abandoned, disused or bunker are outlined in the legend colour. Everything else is an ordinary footprint.",bikelayer:"Bike trails",bikehint:"Cycleways and signed cycle routes from OpenStreetMap.",coordph:"Town, address or coordinates",searching:"Searching...",noresult:"Nothing found in Luxembourg or Wallonia",coordgo:"Go",coordlbl:"Go to coordinates",badcoords:"Coordinates not recognised",badplace:"Point is outside Luxembourg and Wallonia",clearpin:"clear",legal:"Legal",panel:"Layers",layer:"Relief layer",opacity:"Relief opacity",mono:"Monochrome",places:"Place names",sites:"Sites",
-        relief:"Relief",imagery:"Imagery",terrain:"Terrain · DTM",surface:"Surface · DSM",lang:"Language",
+        relief:"Relief",imagery:"Imagery",aerial:"Aerial photo",imgSummer:"Summer",imgLeafoff:"Winter / spring",img2001:"Around 2001",img1970:"Around 1970",terrain:"Terrain · DTM",surface:"Surface · DSM",lang:"Language",
         fit:"Whole region",nodata:"no data",offmap:"outside coverage"},
     fr:{cadcolour:"Couleurs du cadastre",fphint:"Emprises du cadastre officiel. Elles indiquent ou des batiments existent, pas leur etat. Rien ici ne designe un batiment comme abandonne.",tools:"Outils",scanbtn:"Analyser la vue",scanrun:"Analyse des tuiles visibles...",scanzoom:"Zoomez vers 200 m de large, puis analysez",scanfail:"Tuiles illisibles",scanfound:"structures",scanunmapped:"hors cadastre",scannone:"Aucune structure trouvee ici",scanknown:"au cadastre",scannew:"hors cadastre",scanhint:"Les cadres rouges sont des structures sans emprise cadastrale. Peu fiable sous couvert ferme, ou la cime compte comme volume.",fpstrength:"Intensité des emprises",above:"Au-dessus du sol",overlays:"Calques",footprints:"Emprises des bâtiments",ruinlayer:"Ruines et abandons",ruinhint:"Par les contributeurs OpenStreetMap. Les batiments marques en ruine, abandonnes, desaffectes ou bunker sont cernes dans la couleur de la legende. Le reste est une emprise ordinaire.",bikelayer:"Pistes cyclables",bikehint:"Pistes cyclables et itinéraires OpenStreetMap.",coordph:"Localité, adresse ou coordonnées",searching:"Recherche...",noresult:"Rien trouvé au Luxembourg ni en Wallonie",coordgo:"Aller",coordlbl:"Aller aux coordonnées",badcoords:"Coordonnées non reconnues",badplace:"Point hors du Luxembourg et de la Wallonie",clearpin:"effacer",legal:"Mentions légales",panel:"Couches",layer:"Couche relief",opacity:"Opacité du relief",mono:"Monochrome",places:"Noms de lieux",sites:"Sites",
-        relief:"Relief",imagery:"Imagerie",terrain:"Terrain · MNT",surface:"Surface · MNS",lang:"Langue",
+        relief:"Relief",imagery:"Imagerie",aerial:"Photo aérienne",imgSummer:"Été",imgLeafoff:"Hiver / printemps",img2001:"Vers 2001",img1970:"Vers 1970",terrain:"Terrain · MNT",surface:"Surface · MNS",lang:"Langue",
         fit:"Toute la région",nodata:"pas de donnée",offmap:"hors couverture"},
     de:{cadcolour:"Katasterfarben",fphint:"Grundrisse aus dem amtlichen Kataster. Sie zeigen, wo Gebaeude erfasst sind, nicht ihren Zustand. Nichts hier kennzeichnet ein Gebaeude als verlassen.",tools:"Werkzeuge",scanbtn:"Ansicht scannen",scanrun:"Sichtbare Kacheln werden geprueft...",scanzoom:"Auf etwa 200 m Breite zoomen, dann scannen",scanfail:"Kacheln nicht lesbar",scanfound:"Bauwerke",scanunmapped:"nicht im Kataster",scannone:"Hier keine Bauwerke gefunden",scanknown:"im Kataster",scannew:"nicht im Kataster",scanhint:"Rote Kaesten sind Bauwerke ohne Katastergrundriss. Unter geschlossenem Kronendach unzuverlaessig.",fpstrength:"Grundriss-Stärke",above:"Über Grund",overlays:"Overlays",footprints:"Gebäudegrundrisse",ruinlayer:"Ruinen und Verlassenes",ruinhint:"Von OpenStreetMap-Mitwirkenden. Als Ruine, verlassen, stillgelegt oder Bunker erfasste Gebaeude werden in der Legendenfarbe umrandet. Alles andere ist ein gewoehnlicher Grundriss.",bikelayer:"Radwege",bikehint:"Radwege und Radrouten aus OpenStreetMap.",coordph:"Ort, Adresse oder Koordinaten",searching:"Suche läuft...",noresult:"Nichts in Luxemburg oder Wallonien gefunden",coordgo:"Los",coordlbl:"Zu Koordinaten springen",badcoords:"Koordinaten nicht erkannt",badplace:"Punkt liegt außerhalb Luxemburgs und Walloniens",clearpin:"löschen",legal:"Rechtliches",panel:"Ebenen",layer:"Reliefebene",opacity:"Relief-Deckkraft",mono:"Monochrom",places:"Ortsnamen",sites:"Orte",
-        relief:"Relief",imagery:"Luftbild",terrain:"Gelände · DGM",surface:"Oberfläche · DOM",lang:"Sprache",
+        relief:"Relief",imagery:"Luftbild",aerial:"Luftbild",imgSummer:"Sommer",imgLeafoff:"Winter / Frühling",img2001:"Um 2001",img1970:"Um 1970",terrain:"Gelände · DGM",surface:"Oberfläche · DOM",lang:"Sprache",
         fit:"Ganze Region",nodata:"keine Daten",offmap:"außerhalb"},
     lb:{cadcolour:"Kadasterfaarwen",fphint:"Grondrëss aus dem offizielle Kadaster. Si weisen, wou Gebaier agedroe sinn, net an wat fir engem Zoustand. Naischt hei markeiert e Gebai als verlooss.",tools:"Handwierksgeschir",scanbtn:"Vue scannen",scanrun:"Sichtbar Kachele ginn gepreift...",scanzoom:"Op ongefeier 200 m erazoomen, dann scannen",scanfail:"Kachele net liesbar",scanfound:"Bauwierker",scanunmapped:"net am Kadaster",scannone:"Hei keng Bauwierker fonnt",scanknown:"am Kadaster",scannew:"net am Kadaster",scanhint:"Rout Kescht si Bauwierker ouni Kadastergrondress. Enner zouener Bamkroun onzouverlasseg.",fpstrength:"Grondrëss-Stäerkt",above:"Iwwer Buedem",overlays:"Overlays",footprints:"Gebaisgrondrëss",ruinlayer:"Ruinen a Verlooss",ruinhint:"Vun OpenStreetMap-Mataarbechter. Gebaier als Ruin, verlooss, ausser Betrib oder Bunker markeiert kreien e faarwegen Ouschlag. Alles anescht ass en normale Grondress.",bikelayer:"Vëlosweeër",bikehint:"Vëlosweeër aus OpenStreetMap.",coordph:"Uertschaft, Adress oder Koordinaten",searching:"Sichen...",noresult:"Näischt fonnt zu Lëtzebuerg oder Wallounien",coordgo:"Lass",coordlbl:"Op Koordinate goen",badcoords:"Koordinaten net erkannt",badplace:"Punkt läit ausserhalb vu Lëtzebuerg a Wallounien",clearpin:"läschen",legal:"Rechtlechs",panel:"Schichten",layer:"Reliefschicht",opacity:"Relief-Deckkraft",mono:"Monochrom",places:"Uertsnimm",sites:"Plazen",
-        relief:"Relief",imagery:"Loftbild",terrain:"Terrain · MNT",surface:"Uewerfläch · MNS",lang:"Sprooch",
+        relief:"Relief",imagery:"Loftbild",aerial:"Loftbild",imgSummer:"Summer",imgLeafoff:"Wanter / Fréijoer",img2001:"Ëm 2001",img1970:"Ëm 1970",terrain:"Terrain · MNT",surface:"Uewerfläch · MNS",lang:"Sprooch",
         fit:"Ganz Regioun",nodata:"keng Donnéeën",offmap:"ausserhalb"}
   };
   var LANGS = [["en","English"],["fr","Français"],["de","Deutsch"],["lb","Lëtzebuergesch"]];
@@ -1609,11 +1614,10 @@ input[type=range]{width:100%; accent-color:var(--accent)}
   }
   function pair(a, b) { return function () { return L.layerGroup([a(), b()]); }; }
 
-  var ATTR_LU = "Relief : © ACT / geoportail.lu";
-  var ATTR_BE = "Relief : © SPW / geoportail.wallonie.be";
-  var ATTR_IMG = "Imagerie : © Esri, Maxar, Earthstar Geographics";
+  var ATTR_LU = "Relief, orthophoto : © ACT / geoportail.lu";
+  var ATTR_BE = "Relief, orthophoto : © SPW / geoportail.wallonie.be";
   var ATTR_OSM = "Toponymes : © OpenStreetMap";
-  function attribLine(relief) { return relief + " &nbsp;·&nbsp; " + ATTR_IMG + " &nbsp;·&nbsp; " + ATTR_OSM; }
+  function attribLine(relief) { return relief + " &nbsp;·&nbsp; " + ATTR_OSM; }
 
   function elevLU(ll, signal) {
     return fetch("https://api.open-meteo.com/v1/elevation?latitude=" + ll.lat.toFixed(6) +
@@ -1727,8 +1731,49 @@ input[type=range]{width:100%; accent-color:var(--accent)}
   map.getPane("build").style.pointerEvents = "none";
   map.getPane("marks").style.pointerEvents = "none";
 
-  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    { pane: "sat", maxNativeZoom: 19, maxZoom: 21 }).addTo(map);
+  /* aerial photos: government orthophotos, ACT for Luxembourg, SPW for Wallonia.
+     Replaces the former commercial imagery layer. One campaign per option; years are
+     taken from each service's own title. Every campaign here was checked to cover the
+     whole territory; SPW's summer 2025 does not, so Wallonia's summer is 2023. */
+  function luOrtho(id) {
+    return new Wmts("https://wmts{s}.geoportail.lu/opendata/wmts/" + id + "/GLOBAL_WEBMERCATOR_4_V3/{z}/{x}/{y}.jpeg", {
+      pane: "sat", subdomains: ["1", "2", "3", "4"],
+      maxNativeZoom: 20, maxZoom: 21, bounds: L.latLngBounds([49.42, 5.70], [50.20, 6.57])
+    });
+  }
+  /* png + transparent only when stacked over Luxembourg, so SPW's no-data area stays see-through */
+  function walOrtho(svc, png) {
+    return L.tileLayer.wms("https://geoservices.wallonie.be/arcgis/services/IMAGERIE/" + svc + "/MapServer/WMSServer", {
+      pane: "sat", layers: "0", format: png ? "image/png" : "image/jpeg", transparent: !!png, version: "1.3.0",
+      maxZoom: 21, bounds: L.latLngBounds([49.44, 2.78], [50.86, 6.45])
+    });
+  }
+  var IMAGERY = [
+    { id: "summer",  key: "imgSummer",  lu: "ortho_2025",        luYr: "2025", be: "ORTHO_2023_ETE",       beYr: "2023" },
+    { id: "leafoff", key: "imgLeafoff", lu: "ortho_2025_winter", luYr: "2025", be: "ORTHO_2026_PRINTEMPS", beYr: "2026" },
+    { id: "y2001",   key: "img2001",    lu: "ortho_2001",        luYr: "2001", be: "ORTHO_2001_2003",      beYr: "2001-2003" },
+    { id: "y1970",   key: "img1970",    lu: "ortho_1967",        luYr: "1967", be: "ORTHO_1971",           beYr: "1971" }
+  ];
+  var imgId = "summer", imgLayer = null;
+  function imgDef(id) {
+    for (var i = 0; i < IMAGERY.length; i++) if (IMAGERY[i].id === id) return IMAGERY[i];
+    return IMAGERY[0];
+  }
+  function imgYear(def) {
+    if (region.reg === 0) return def.luYr;
+    if (region.reg === 1) return def.beYr;
+    return def.luYr === def.beYr ? def.luYr : def.luYr + " / " + def.beYr;
+  }
+  function setImagery(id) {
+    var def = imgDef(id);
+    imgId = def.id;
+    if (imgLayer) map.removeLayer(imgLayer);
+    if (region.reg === 0) imgLayer = luOrtho(def.lu);
+    else if (region.reg === 1) imgLayer = walOrtho(def.be, false);
+    else imgLayer = L.layerGroup([luOrtho(def.lu), walOrtho(def.be, true)]);
+    imgLayer.addTo(map);
+  }
+  setImagery(imgId);
 
   function setReliefOpacity(v) {
     if (!reliefLayer) return;
@@ -1943,6 +1988,7 @@ input[type=range]{width:100%; accent-color:var(--accent)}
   var panel = document.getElementById("panel");
   var panelHead = document.getElementById("panelHead");
   var layerGrp = document.getElementById("layerGrp");
+  var imgGrp = document.getElementById("imgGrp");
   var sitesBox = document.getElementById("sites");
   var opacity = document.getElementById("opacity");
   var opVal = document.getElementById("opVal");
@@ -1983,6 +2029,19 @@ input[type=range]{width:100%; accent-color:var(--accent)}
         '<span class="on">' + t(def.key) + '</span><span class="yr">' + def.year + "</span>";
       l.querySelector("input").addEventListener("change", function () { setRelief(def.id); });
       layerGrp.appendChild(l);
+    });
+  }
+
+  function buildImagery() {
+    imgGrp.innerHTML = '<span class="lbl">' + t("aerial") + "</span>";
+    IMAGERY.forEach(function (def) {
+      var l = document.createElement("label");
+      l.className = "opt";
+      l.innerHTML = '<input type="radio" name="imagery" id="im-' + def.id + '" value="' + def.id + '"' +
+        (def.id === imgId ? " checked" : "") + '>' +
+        '<span class="on">' + t(def.key) + '</span><span class="yr">' + imgYear(def) + "</span>";
+      l.querySelector("input").addEventListener("change", function () { setImagery(def.id); });
+      imgGrp.appendChild(l);
     });
   }
 
@@ -2047,8 +2106,9 @@ input[type=range]{width:100%; accent-color:var(--accent)}
     if (!monoTouched) { monoBox.checked = region.mono; app.classList.toggle("mono", region.mono); }
 
     map.setMinZoom(region.minZoom);
-    buildRegionMenu(); buildLayers(); buildSites();
+    buildRegionMenu(); buildLayers(); buildImagery(); buildSites();
     setRelief(layerId);
+    setImagery(imgId);
     drawMask(region.border);
     if (view) {
       flyThere(view.c, view.z);
@@ -2090,7 +2150,7 @@ input[type=range]{width:100%; accent-color:var(--accent)}
     document.getElementById("scanBtnLbl").textContent = t("scanbtn");
     document.getElementById("scanHint").textContent = t("scanhint");
     buildLegend();
-    buildLangMenu(); buildLayers(); buildSites();
+    buildLangMenu(); buildLayers(); buildImagery(); buildSites();
     attrib._update();
   }
 
@@ -2871,7 +2931,7 @@ input[type=range]{width:100%; accent-color:var(--accent)}
   /* ---------------- boot ---------------- */
   app.classList.add("mono");
   paintFlag(pillFlag, region.flag);
-  buildRegionMenu(); buildLangMenu(); buildLayers(); buildSites(); buildLegend();
+  buildRegionMenu(); buildLangMenu(); buildLayers(); buildImagery(); buildSites(); buildLegend();
   setRelief(layerId);
   drawMask(region.border);
   setLang("en");

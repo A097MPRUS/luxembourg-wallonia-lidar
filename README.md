@@ -1,8 +1,8 @@
 # Luxembourg & Wallonia LiDAR
 
 A LiDAR prospecting map for **Luxembourg** and **Wallonia (Belgium)**. It puts high resolution
-shaded relief derived from the two national LiDAR surveys next to aerial imagery, split by a
-draggable swipe divider, for finding ruined and abandoned structures, especially under forest
+shaded relief derived from the two national LiDAR surveys next to the governments' own aerial
+photos, split by a draggable swipe divider, for finding ruined and abandoned structures, especially under forest
 canopy where aerial imagery shows nothing but treetops.
 
 Live site: **https://a097mprus.github.io/luxembourg-wallonie-lidar/**
@@ -30,7 +30,8 @@ The only library is Leaflet 1.9.4 from cdnjs, and its CSS is inlined in each fil
 
 | Feature | Notes |
 | --- | --- |
-| Swipe compare | Relief left, imagery right. Drag the divider, or use arrow keys and Home/End. |
+| Swipe compare | Relief left, aerial photo right. Drag the divider, or use arrow keys and Home/End. |
+| Aerial photos | Government orthophotos: ACT in Luxembourg, SPW in Wallonia. Summer, winter or spring, around 2001, around 1970. |
 | Regions | Luxembourg, Wallonia, or both. Everything outside is masked. |
 | Relief layers | Terrain (DTM), Surface (DSM), Above ground (DSM minus DTM, computed in browser). |
 | Ruins and abandoned | 8,478 OpenStreetMap points across six kinds. |
@@ -67,15 +68,18 @@ merging same kind points within 35 m. All figures verified against the shipped d
 | LU buildings | ACT, geoportail.lu | Cadastral footprints. |
 | WAL relief | SPW, geoservices.wallonie.be | LiDAR 2021 to 2022, 50 cm. |
 | WAL buildings | SPW PICC | Building footprints and other structures. |
-| Imagery | Esri World Imagery | Native to zoom 19. **Not open data, Esri terms apply.** |
+| LU aerial photos | ACT, geoportail.lu | 1967, 2001, 2025 summer, 2025 winter. 2001 and 2025 are CC0 on data.public.lu; 1967 is published there without a stated licence. |
+| WAL aerial photos | SPW, geoservices.wallonie.be | 1971, 2001-2003, 2023 summer, 2026 spring. Free use under SPW's web service conditions. |
 | Elevation (LU) | Open-Meteo, Copernicus DEM GLO-90 | 90 m. Not the LiDAR. |
 | Elevation (WAL) | SPW MNT 2021-2022 | Real 50 cm terrain model value. |
 | Geocoding | Nominatim, OpenStreetMap | Only when a query is not a coordinate and not an embedded town. |
 | Points and lines | OpenStreetMap contributors via Overpass | Pulled 2026-09-20. |
 
 OpenStreetMap data is © OpenStreetMap contributors, available under the Open Database License.
-The LiDAR relief and cadastre layers are the open data of ACT and SPW. **Esri World Imagery is not
-open data**, and the imagery layer is subject to Esri's own terms.
+The LiDAR relief, cadastre and aerial photo layers all come from ACT and SPW. Luxembourg's 2001 and
+2025 photos are public domain (CC0); its 1967 photo is published by ACT without a stated licence. SPW lets anyone use its web map services free of charge, provided the source
+stays credited, the images are not altered, and the services are not overloaded. **No commercial
+imagery is used.**
 
 ## Privacy
 
@@ -97,6 +101,9 @@ session only.
   rectilinear earthworks that swamp any heuristic.
 - **The phone build has not been tested on real hardware.** It boots clean in headless testing.
 - Address search uses Nominatim's public API, which is sized for personal use.
+- In the combined Luxembourg + Wallonia view, SPW's photos run about 1 to 2 km past the Walloon
+  border, so a thin strip on the Luxembourg side shows the Walloon photo. Single region views are
+  unaffected.
 
 ## Documentation
 

@@ -1,7 +1,8 @@
 # Change log
 
-Every change made to this project in this working session (2026-09-20, by Kun).
-Newest last. One entry per change: what, where, why, and the evidence it works.
+Every change made to this project, newest last. Change sets A and B by Kun
+(2026-09-20); C and D by Claude (2026-09-20 and 2026-09-21).
+One entry per change: what, where, why, and the evidence it works.
 Owner's rule: this file gets a detailed entry for EVERY change, in the same
 pass as the change itself. Small changes count.
 
@@ -456,6 +457,163 @@ takedown should never have happened. Owner: "put it back up".
 
 **Evidence.** Pages status `built`; `index.html` and the v2 build both return
 HTTP 200 on fresh requests.
+
+## Change set D - government aerial photos replace Esri World Imagery (2026-09-21)
+
+Owner asked which imagery would be safer than Esri World Imagery (not open
+data; the map loaded its tiles without an ArcGIS account). Recommended the two
+governments' own orthophotos. Owner: build it as an alpha in `Plans\alpha\`,
+do not touch the handoff until confirmed. After review: "this seems good to
+me", replace the builds in `tests\`, delete all Esri World Imagery, update
+GitHub, the website and the handoff.
+
+### D1. The imagery layer (both builds)
+
+**What.** Removed the Esri `L.tileLayer` (server.arcgisonline.com
+World_Imagery). Added in its place, in pane `sat` (z 350, swipe clip
+unchanged):
+- `luOrtho(id)`: ACT WMTS, `wmts{1-4}.geoportail.lu/opendata/wmts/<id>/
+  GLOBAL_WEBMERCATOR_4_V3/{z}/{x}/{y}.jpeg`, `maxNativeZoom` 20, LU bounds.
+- `walOrtho(svc, png)`: SPW WMS 1.3.0, `geoservices.wallonie.be/arcgis/
+  services/IMAGERIE/<svc>/MapServer/WMSServer`, layer `0`, EPSG:3857, WAL
+  bounds; JPEG normally, transparent PNG when stacked in the combined region.
+- `IMAGERY` table of four options, `imgDef`, `imgYear`, `setImagery(id)`.
+  `setImagery` runs at boot and from `setRegion`; the chosen option persists
+  across region switches.
+
+**Picker.** New `<div class="grp" id="imgGrp">` right after `layerGrp` in both
+builds (inside the Layers page on the phone). `buildImagery()` renders radios
+`im-summer`, `im-leafoff`, `im-y2001`, `im-y1970` in the same `.opt` style as
+the relief list, with the year in the `.yr` column. Called from boot,
+`setRegion` and `setLang` (the `buildLayers(); buildSites();` triple became
+`buildLayers(); buildImagery(); buildSites();` in all three places).
+Translations in all four languages: `aerial`, `imgSummer`, `imgLeafoff`,
+`img2001`, `img1970` (EN Aerial photo / Summer / Winter / spring / Around
+2001 / Around 1970; FR Photo aérienne / Été / Hiver / printemps / Vers 2001 /
+Vers 1970; DE Luftbild / Sommer / Winter / Frühling / Um 2001 / Um 1970;
+LB Loftbild / Summer / Wanter / Fréijoer / Ëm 2001 / Ëm 1970).
+
+| Option | Luxembourg | Wallonia |
+| --- | --- | --- |
+| Summer (default) | `ortho_2025` | `ORTHO_2023_ETE` |
+| Winter / spring | `ortho_2025_winter` | `ORTHO_2026_PRINTEMPS` |
+| Around 2001 | `ortho_2001` | `ORTHO_2001_2003` |
+| Around 1970 | `ortho_1967` | `ORTHO_1971` |
+
+**Attribution.** `ATTR_LU` / `ATTR_BE` now read "Relief, orthophoto : © ACT /
+geoportail.lu" and "Relief, orthophoto : © SPW / geoportail.wallonie.be";
+`ATTR_IMG` (Esri, Maxar, Earthstar Geographics) removed and `attribLine`
+simplified.
+
+**Legal copy.** Third-party list: Esri entry removed; ACT and SPW entries now
+say "LiDAR relief ... and aerial photos". Source licences: the Esri paragraph
+replaced by one paragraph per region (see D6 for the wording). Cookies page:
+"Esri" dropped from the list of services that set no cookies. Data sources
+table: the Esri row replaced by "Aerial photos, Luxembourg | ACT,
+geoportail.lu | 1967, 2001, 2025 | varies by year" and "Aerial photos,
+Wallonia | SPW, geoportail.wallonie.be | 1971, 2001-2003, 2023, 2026 | varies
+by year".
+
+**Kept on purpose.** `esriGeometryPoint` in `elevBE`: a parameter name of
+SPW's own ArcGIS elevation service, not Esri imagery. Removing it would break
+the Wallonia altitude readout.
+
+### D2. Coverage finding: SPW summer 2025 is unusable
+
+The alpha first used `ORTHO_2025_ETE` for Wallonia's summer. Testing tile
+content (not just load events) showed white "no photo" tiles. A coverage sweep
+at 10 Walloon towns (Tournai, Mons, Namur, Liège, Eupen, Dinant, Bastogne,
+Arlon, Chimay, Wavre):
+
+| Service | Photo at |
+| --- | --- |
+| ORTHO_LAST, ORTHO_2026_PRINTEMPS, ORTHO_2025_PRINTEMPS, ORTHO_2023_ETE, ORTHO_2001_2003, ORTHO_1971 | 10 / 10 |
+| ORTHO_2024 | 7 / 10 (no Tournai, Arlon, Chimay) |
+| ORTHO_2025_ETE | 0 / 10 |
+
+`ORTHO_LAST` is pixel-identical (mean difference 0.0) to `ORTHO_2023_ETE` at
+Namur, Bastogne and Tournai, so Wallonia's summer uses the dated
+`ORTHO_2023_ETE` service and is labelled 2023; a dated service keeps the label
+true when SPW moves `ORTHO_LAST` on. The four ACT layers were checked at
+Clervaux, Wiltz, Echternach, Esch, Remich, Steinfort and Luxembourg City:
+photo everywhere. `ortho_latest` is byte-identical to `ortho_2025` today.
+Speed: 12 SPW WMS tiles in 200 to 350 ms, dated or `ORTHO_LAST` alike.
+
+### D3. Combined region: stacking at the border
+
+ACT tiles are white outside Luxembourg; SPW tiles as transparent PNG are
+transparent where SPW has no photo. The combined region stacks ACT below and
+SPW above. Pixel test at four border tiles (Steinfort/Arlon, Martelange,
+Troisvierges/Gouvy, Rodange/Athus): ACT alone 38 to 89% white, stacked result
+0% white, 0% empty.
+
+**Known quirk.** SPW's mosaic runs past the Walloon border: fully transparent
+only from lon 5.94 at lat 49.66 (Steinfort), within about 1 km at Martelange.
+In the combined view a thin strip on the Luxembourg side shows the Walloon
+photo. Single-region views are unaffected. Not fixed; would need clipping SPW
+tiles to the Walloon polygon.
+
+### D4. Licences checked at the source
+
+- ACT on data.public.lu: `Orthophoto officielle ... édition 2001`, `édition
+  été 2025`, `édition hiver 2025` all `cc-zero`.
+- SPW: "Conditions d'accès et d'utilisation des services web géographiques de
+  visualisation du SPW", v1.1 of 3 August 2016 (LicServicesSPW.pdf, linked
+  from the ORTHO_LAST catalogue record): free access and use for any user
+  (art. 3), no disproportionate load (art. 5 §1), do not hide or remove the
+  source mention (art. 5 §3), do not alter the data (art. 5 §4).
+
+### D5. Promotion into tests\ and the site
+
+`alpha\` builds copied into `tests\` with only the two alpha markers removed
+(`<title>` "(alpha)" and "ALPHA" in the header comment); `diff` shows exactly
+those two lines per file. The old Esri builds remain in the `site\` git
+history (last in commit `4ffc6d9`). `site\` builds synced; `site\index.html`
+and `site\README.md` rewritten wherever they mentioned Esri (subtitle,
+"What it shows" row, data source rows, licence paragraph) and gained the line
+"Every map layer comes from a public body or from OpenStreetMap. No commercial
+imagery is used." README caveats gained the border strip.
+
+### D6. Correction found while documenting: the 1967 licence
+
+The alpha's legal copy said all Luxembourg orthophotos are CC0. Checking each
+dataset: 2001 and both 2025 editions are `cc-zero`, but `Orthophoto 1967`
+(ACT, data.public.lu) has licence `notspecified`. Wording corrected in both
+builds (and in `alpha\`, the landing page, the README and HANDOFF) to: "The
+2001 and 2025 editions are published on data.public.lu under CC0, which
+places them in the public domain. The 1967 edition is published there by ACT
+without a stated licence. All are credited." The 1967 option is kept (the
+owner approved it in the alpha); dropping it for Luxembourg is a one-row
+change, listed in HANDOFF open items.
+
+### D7. Tooling
+
+`work\make_alpha.py` is the exact transformation (every replacement asserts
+its expected count). Reproducibility check: applied to the pre-D builds, then
+with the alpha markers removed, it produces the current `tests\` builds byte
+for byte (both files: True).
+
+### D8. Docs
+
+HANDOFF fully revised (new section 8 on aerial photos, updated file map,
+hashes, sources, open items, site section). AGENTS gained the no commercial
+imagery rule and the new ids. `handoff/ARCHITECTURE.md` gained the new ids,
+functions and the `sat` pane contents. `handoff/HANDOFF.md` marks its Esri
+source row as removed so nobody re-adds it from the old baseline.
+
+### Evidence (all 2026-09-21)
+
+- Headless Edge, fresh profile, reduced motion, probe on a COPY of each build:
+  Luxembourg x 4 options and Wallonia x 4 options, every sampled tile a real
+  photo (16/16 per option in LU, 16/16 or 10/10 in WAL), 0 tile errors;
+  combined region 32/32 tiles loaded, 0 errors, both services present.
+- French picker labels render; legal templates, `#ui` and the attribution
+  contain no Esri, Maxar, Earthstar or arcgisonline (both builds).
+- Data sources table rows render as intended (both builds).
+- Phone build at 375 px: Layers panel 14 to 309 px wide, picker visible, body
+  scrolls, no horizontal overflow, no JS errors.
+- Final builds: v2 2,348,169 bytes sha256 `b7b61e82...`, mobile 2,358,242
+  bytes `975884fa...`.
 
 ## Rebuild recipe (if the data ever needs regenerating)
 
