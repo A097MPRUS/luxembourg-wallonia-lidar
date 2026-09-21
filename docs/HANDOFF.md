@@ -14,6 +14,15 @@ it to find abandoned and ruined structures, especially under forest canopy. It
 is not a web app: each build is a single self-contained HTML file, no server,
 no build step, no keys. Leaflet 1.9.4 from cdnjs is the only library.
 
+## 1b. Naming (owner request, 2026-09-21)
+
+English-facing text says **Wallonia**, not "Wallonie": page titles, the region
+menu ("Wallonia", "Luxembourg + Wallonia"), search hit labels, the landing
+page and the README. Deliberately left as "Wallonie": the French UI strings,
+the agency's official name "Service public de Wallonie", the domain
+`geoservices.wallonie.be`, and the file names (renaming them would break the
+live URLs). German keeps "Wallonien". See CHANGES.md C6.
+
 ## 2. Where the files are
 
 The owner's PC, absolute paths (everything lives under one folder):
@@ -21,8 +30,8 @@ The owner's PC, absolute paths (everything lives under one folder):
 ```
 C:\Users\User\.kun\default_workspace\Plans\
   tests\          the builds (the only copies) and helpers
-    luxembourg-wallonie-lidar-v2.html      2,344,433 bytes, sha256 dd710c1d...
-    luxembourg-wallonie-lidar-mobile.html  2,354,504 bytes, sha256 805131a2...
+    luxembourg-wallonie-lidar-v2.html      2,344,433 bytes, sha256 f75b407a...
+    luxembourg-wallonie-lidar-mobile.html  2,354,504 bytes, sha256 4a403b8e...
     serve-windows.cmd       double-click LAN server for phone testing
     allow-port-8000.cmd     one-time firewall helper (TCP 8000, private)
     RUINS-EXPANSION.md      change set A notes (totals superseded)

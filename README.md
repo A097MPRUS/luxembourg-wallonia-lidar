@@ -1,4 +1,4 @@
-# Luxembourg & Wallonie LiDAR
+# Luxembourg & Wallonia LiDAR
 
 A LiDAR prospecting map for **Luxembourg** and **Wallonia (Belgium)**. It puts high resolution
 shaded relief derived from the two national LiDAR surveys next to aerial imagery, split by a
@@ -31,7 +31,7 @@ The only library is Leaflet 1.9.4 from cdnjs, and its CSS is inlined in each fil
 | Feature | Notes |
 | --- | --- |
 | Swipe compare | Relief left, imagery right. Drag the divider, or use arrow keys and Home/End. |
-| Regions | Luxembourg, Wallonie, or both. Everything outside is masked. |
+| Regions | Luxembourg, Wallonia, or both. Everything outside is masked. |
 | Relief layers | Terrain (DTM), Surface (DSM), Above ground (DSM minus DTM, computed in browser). |
 | Ruins and abandoned | 8,478 OpenStreetMap points across six kinds. |
 | Bike trails | 23,764 lines of cycleways and signed routes. |

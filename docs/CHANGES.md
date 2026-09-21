@@ -408,6 +408,26 @@ was touched.
 - **Custom domain** is supported and free to point at Pages; only the domain
   registration costs anything.
 
+### C6. "Wallonie" renamed to "Wallonia" in English-facing text (2026-09-21)
+
+**What.** In both builds: the page `<title>` (desktop and mobile), the header
+comment, the CSS section comment, the region labels `"Wallonia"` and
+`"Luxembourg + Wallonia"`, and the region name on search hits. In the site:
+the landing page title and heading, the README heading and Regions row.
+Exactly one occurrence of each replaced per build.
+
+**Not changed, on purpose.** French strings ("en Wallonie", "de la
+Wallonie"), German ("Wallonien"), the official agency name "Service public de
+Wallonie", the domain `geoservices.wallonie.be`, and the file names, because
+renaming the files would break the published URLs.
+
+**Why.** Owner: it says wallonie instead of wallonia.
+
+**Evidence.** Both builds served locally: titles read "Luxembourg & Wallonia
+LiDAR" and "... Mobile", the region menu reads Luxembourg / Wallonia /
+Luxembourg + Wallonia, no console errors. Sizes unchanged (same letter
+count); new sha256 prefixes v2 `f75b407a`, mobile `4a403b8e`.
+
 ## Rebuild recipe (if the data ever needs regenerating)
 
 - Raw pulls: `work/*.overpass` files; responses in `work/*.json`.
