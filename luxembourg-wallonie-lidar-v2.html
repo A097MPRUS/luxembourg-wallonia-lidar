@@ -1864,7 +1864,8 @@ input[type=range]{width:100%; accent-color:var(--accent)}
     }
     placeBox.innerHTML = html.join("");
   }
-  map.on("zoomend moveend viewreset", drawPlaces);
+  /* Keep settlement labels anchored during touch pan and pinch zoom. */
+  map.on("move zoom zoomend moveend viewreset resize", drawPlaces);
 
   /* ---------------- swipe clip ---------------- */
   var satPane = map.getPane("sat");
