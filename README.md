@@ -102,7 +102,6 @@ session only.
   neither provider publishes raw elevation over the web, hillshade edge detection fails because a
   single sun azimuth hides walls parallel to the light, and Luxembourg's forest floor is full of
   rectilinear earthworks that swamp any heuristic.
-- **The phone build has not been tested on real hardware.** It boots clean in headless testing.
 - Address search uses Nominatim's public API, which is sized for personal use.
 - In the combined Luxembourg + Wallonia view, SPW's photos run about 1 to 2 km past the Walloon
   border, so a thin strip on the Luxembourg side shows the Walloon photo. Single region views are
