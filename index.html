@@ -81,7 +81,7 @@
     <a class="go" id="go" href="luxembourg-wallonia-lidar-v2.html">Open the map</a>
     <p class="alt">
       <span class="item"><a href="luxembourg-wallonia-lidar-v2.html">Desktop build</a><span class="rec" id="recD" hidden>recommended</span></span>
-      <span class="item"><a href="luxembourg-wallonia-lidar-mobile.html">Phone build</a><span class="rec" id="recM" hidden>recommended</span></span>
+      <span class="item"><a href="luxembourg-wallonia-lidar-mobile.html?v=8ca5d808">Phone build</a><span class="rec" id="recM" hidden>recommended</span></span>
     </p>
   </div>
 
@@ -141,9 +141,9 @@
 </div>
 <script>
 (function(){
-  var phone = window.matchMedia("(pointer:coarse)").matches && window.innerWidth < 900;
+  var phone = window.matchMedia("(pointer:coarse)").matches && Math.min(window.innerWidth, window.innerHeight) < 900;
   var go = document.getElementById("go");
-  if (phone) go.setAttribute("href", "luxembourg-wallonia-lidar-mobile.html");
+  if (phone) go.setAttribute("href", "luxembourg-wallonia-lidar-mobile.html?v=8ca5d808");
   document.getElementById(phone ? "recM" : "recD").hidden = false;
 })();
 </script>
