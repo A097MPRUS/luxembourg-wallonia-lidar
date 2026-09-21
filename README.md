@@ -109,8 +109,6 @@ session only.
 
 | File | Contents |
 | --- | --- |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | File shape, the element id contract, pane z-order, data schema, how to regenerate the data. |
-| [docs/CHANGES.md](docs/CHANGES.md) | Every change, with evidence. |
 | [docs/AGENTS.md](docs/AGENTS.md) | Working rules for anyone, human or agent, editing the builds. |
 
 ## Working on it
