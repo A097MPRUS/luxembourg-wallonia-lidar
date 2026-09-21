@@ -2531,7 +2531,8 @@ input[type=range]{height:22px}
     }
     markBox.innerHTML = html.join("");
   }
-  map.on("zoomend moveend viewreset", drawRuins);
+  /* Keep site dots and their labels anchored during touch pan and pinch zoom. */
+  map.on("move zoom zoomend moveend viewreset resize", drawRuins);
   ruinsBox.addEventListener("change", function () { drawRuins(); drawShapes(); });
 
   function buildLegend() {
