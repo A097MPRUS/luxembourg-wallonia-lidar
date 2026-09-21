@@ -42,6 +42,7 @@ The only library is Leaflet 1.9.4 from cdnjs, and its CSS is inlined in each fil
 | Scan (beta) | Finds structures with no cadastral footprint. See the caveats below. |
 | Search | Coordinates (decimal, DMS, comma decimals), embedded town names, Nominatim addresses. |
 | Elevation readout | Real 50 cm LiDAR in Wallonia, Copernicus GLO-90 at 90 m in Luxembourg. |
+| Map tools | Night mode, relief contrast, distance / area / point measuring, remembered spots (this session only), share view (the view is kept in the URL as `#lat,lng,zoom`), full screen, and an opt-in My location button. |
 | Languages | EN, FR, DE, LB. |
 | Legal pages | Privacy, Terms, Cookies, Data sources. Hash routed: `#privacy`, `#terms`, `#cookies`, `#sources`. |
 
@@ -83,7 +84,9 @@ imagery is used.**
 
 ## Privacy
 
-The page sets no cookies and uses no `localStorage`, `sessionStorage` or IndexedDB. Tiles,
+The page sets no cookies and uses no `localStorage`, `sessionStorage` or IndexedDB. The My
+location button asks the browser for your position only when you press it; the position is
+used to centre the map and is never sent anywhere. Tiles,
 elevation values and address lookups are requested directly from the providers above, so those
 providers see the requests. One third party cookie appears, `BIGipServer~PRODUCTION~PO_GEOSERVICES_SSL`
 from `geoservices.wallonie.be`, an F5 load balancer session cookie that is HttpOnly, Secure and
