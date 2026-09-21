@@ -1537,9 +1537,8 @@ input[type=range]{height:22px}
   <ul>
     <li><b>Luxembourg relief</b>: ACT, published as open data through geoportail.lu. Attribution required.</li>
     <li><b>Wallonia relief</b>: SPW, published through geoportail.wallonie.be. Attribution required.</li>
-    <li><b>Aerial photos, Luxembourg</b>: ACT orthophotos. The 2001 and 2025 editions are published
-      on data.public.lu under CC0, which places them in the public domain. The 1967 edition is
-      published there by ACT without a stated licence. All are credited.</li>
+    <li><b>Aerial photos, Luxembourg</b>: ACT orthophotos, the 2001 and 2025 editions, published on
+      data.public.lu under CC0, which places them in the public domain. Credited anyway.</li>
     <li><b>Aerial photos, Wallonia</b>: SPW orthophotos, shown through SPW's web viewing services,
       which SPW lets anyone use free of charge. The source must stay credited, the images must not
       be altered, and the services must not be overloaded.</li>
@@ -1641,7 +1640,7 @@ input[type=range]{height:22px}
         <tr><td>Wallonia DTM, older</td><td>SPW, geoportail.wallonie.be</td>
             <td class="num">2013-2014</td><td class="num">50 cm raster</td></tr>
         <tr><td>Aerial photos, Luxembourg</td><td>ACT, geoportail.lu</td>
-            <td class="num">1967, 2001, 2025</td><td class="num">varies by year</td></tr>
+            <td class="num">2001, 2025</td><td class="num">varies by year</td></tr>
         <tr><td>Aerial photos, Wallonia</td><td>SPW, geoportail.wallonie.be</td>
             <td class="num">1971, 2001-2003, 2023, 2026</td><td class="num">varies by year</td></tr>
         <tr><td>Altitude, Luxembourg</td><td>Open-Meteo, Copernicus DEM GLO-90</td>
@@ -1913,7 +1912,10 @@ input[type=range]{height:22px}
   /* aerial photos: government orthophotos, ACT for Luxembourg, SPW for Wallonia.
      Replaces the former commercial imagery layer. One campaign per option; years are
      taken from each service's own title. Every campaign here was checked to cover the
-     whole territory; SPW's summer 2025 does not, so Wallonia's summer is 2023. */
+     whole territory; SPW's summer 2025 does not, so Wallonia's summer is 2023.
+     lu: null means no Luxembourg photo for that option (the ACT photo for this option was dropped 2026-09-21: no
+     stated licence), so the option is hidden in Luxembourg and Wallonia-only in the
+     combined region. */
   function luOrtho(id) {
     return new Wmts("https://wmts{s}.geoportail.lu/opendata/wmts/" + id + "/GLOBAL_WEBMERCATOR_4_V3/{z}/{x}/{y}.jpeg", {
       pane: "sat", subdomains: ["1", "2", "3", "4"],
@@ -1931,7 +1933,7 @@ input[type=range]{height:22px}
     { id: "summer",  key: "imgSummer",  lu: "ortho_2025",        luYr: "2025", be: "ORTHO_2023_ETE",       beYr: "2023" },
     { id: "leafoff", key: "imgLeafoff", lu: "ortho_2025_winter", luYr: "2025", be: "ORTHO_2026_PRINTEMPS", beYr: "2026" },
     { id: "y2001",   key: "img2001",    lu: "ortho_2001",        luYr: "2001", be: "ORTHO_2001_2003",      beYr: "2001-2003" },
-    { id: "y1970",   key: "img1970",    lu: "ortho_1967",        luYr: "1967", be: "ORTHO_1971",           beYr: "1971" }
+    { id: "y1970",   key: "img1970",    lu: null,                luYr: null,   be: "ORTHO_1971",           beYr: "1971" }
   ];
   var imgId = "summer", imgLayer = null;
   function imgDef(id) {
@@ -1941,16 +1943,21 @@ input[type=range]{height:22px}
   function imgYear(def) {
     if (region.reg === 0) return def.luYr;
     if (region.reg === 1) return def.beYr;
+    if (!def.lu) return "WAL " + def.beYr;
     return def.luYr === def.beYr ? def.luYr : def.luYr + " / " + def.beYr;
   }
+  function imgAvail(def) { return region.reg === 0 ? !!def.lu : region.reg === 1 ? !!def.be : !!(def.lu || def.be); }
   function setImagery(id) {
     var def = imgDef(id);
+    if (!imgAvail(def)) def = IMAGERY[0];
     imgId = def.id;
     if (imgLayer) map.removeLayer(imgLayer);
     if (region.reg === 0) imgLayer = luOrtho(def.lu);
     else if (region.reg === 1) imgLayer = walOrtho(def.be, false);
-    else imgLayer = L.layerGroup([luOrtho(def.lu), walOrtho(def.be, true)]);
+    else imgLayer = L.layerGroup(def.lu ? [luOrtho(def.lu), walOrtho(def.be, true)] : [walOrtho(def.be, true)]);
     imgLayer.addTo(map);
+    var radio = document.getElementById("im-" + imgId);
+    if (radio) radio.checked = true;
   }
   setImagery(imgId);
 
@@ -2214,6 +2221,7 @@ input[type=range]{height:22px}
   function buildImagery() {
     imgGrp.innerHTML = '<span class="lbl">' + t("aerial") + "</span>";
     IMAGERY.forEach(function (def) {
+      if (!imgAvail(def)) return;
       var l = document.createElement("label");
       l.className = "opt";
       l.innerHTML = '<input type="radio" name="imagery" id="im-' + def.id + '" value="' + def.id + '"' +

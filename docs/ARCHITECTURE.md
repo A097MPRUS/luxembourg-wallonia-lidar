@@ -125,7 +125,7 @@ Use a venv; shapely and numpy are not in the system Python on this machine.
 | `ArcGisDyn` | `L.TileLayer` subclass building ArcGIS `export` URLs per tile bbox. |
 | `Ndsm` | `L.GridLayer` that loads the DTM and DSM tiles and paints their difference to a canvas. |
 | `luOrtho(id)` / `walOrtho(svc, png)` | ACT orthophoto WMTS layer / SPW orthophoto WMS layer, both in pane `sat`. |
-| `setImagery(id)` / `buildImagery()` | Swap the aerial photo per the `IMAGERY` table and region; render the picker into `#imgGrp`. |
+| `setImagery(id)` / `buildImagery()` / `imgAvail(def)` | Swap the aerial photo per the `IMAGERY` table and region; render the picker into `#imgGrp`; hide options the region has no photo for (`lu: null`). |
 | `inTerritory(lng, lat, polys)` | Even-odd ray cast across all rings. Used for masking, region routing and the elevation source choice. |
 | `drawMask(key)` | Builds the world-with-holes mask and the border outlines. |
 | `drawShapes()` | Draws the condition-coloured OSM building outlines from `DATA.shapes`. |

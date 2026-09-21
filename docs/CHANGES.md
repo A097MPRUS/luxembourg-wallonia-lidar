@@ -1,7 +1,7 @@
 # Change log
 
 Every change made to this project, newest last. Change sets A and B by Kun
-(2026-09-20); C and D by Claude (2026-09-20 and 2026-09-21).
+(2026-09-20); C, D and E by Claude (2026-09-20 and 2026-09-21).
 One entry per change: what, where, why, and the evidence it works.
 Owner's rule: this file gets a detailed entry for EVERY change, in the same
 pass as the change itself. Small changes count.
@@ -614,6 +614,46 @@ source row as removed so nobody re-adds it from the old baseline.
   scrolls, no horizontal overflow, no JS errors.
 - Final builds: v2 2,348,169 bytes sha256 `b7b61e82...`, mobile 2,358,242
   bytes `975884fa...`.
+
+## Change set E - Luxembourg's 1967 aerial photo removed (2026-09-21)
+
+**What.** Owner: "yeah remove 1967 please", after D6 showed that ACT's
+`Orthophoto 1967` has licence `notspecified` on data.public.lu while every
+other Luxembourg photo used is CC0.
+
+- `IMAGERY` row `y1970`: `lu: "ortho_1967", luYr: "1967"` became
+  `lu: null, luYr: null`. Wallonia keeps `ORTHO_1971`.
+- New `imgAvail(def)`: an option with no photo for the current region is not
+  offered. Luxembourg region: three options. Wallonia: four. Combined: four,
+  with "Around 1970" showing year "WAL 1971" and only SPW tiles.
+- `setImagery`: if the chosen option is not available after a region switch,
+  it falls back to Summer and ticks that radio (without the tick the picker
+  showed nothing selected, because it is rebuilt before `setImagery` runs).
+- Legal copy: Luxembourg licence paragraph now "ACT orthophotos, the 2001 and
+  2025 editions, published on data.public.lu under CC0, which places them in
+  the public domain. Credited anyway."; Data sources row "2001, 2025".
+- Site landing page and README: 1967 and its licence caveat removed; the
+  picker is described as "around 1970 in Wallonia only".
+
+**Mishap, recorded for honesty.** The first run of the patch script opened
+the desktop build for writing before patching, then stopped on an over-broad
+check ("1967" also occurs as digits inside the embedded data blocks). That left
+`tests/luxembourg-wallonie-lidar-v2.html` empty for a moment. It was restored
+at once from a copy taken just before the run and verified byte-identical
+(sha256 `b7b61e82...`, identical to the `site/` copy) before anything else
+happened. The script now patches fully in memory and writes only on success,
+and its check ignores the JSON data blocks. Script: `work/drop_1967.py`.
+
+**Evidence.** Headless Edge probe (fresh profile, reduced motion) on copies
+of both builds: Luxembourg shows Summer 2025 / Winter-spring 2025 / Around
+2001 and requests only `ortho_2025` (24 tiles, 0 errors); Wallonia shows all
+four with 1971, and 1970 loads `ORTHO_1971` (30 tiles, 0 errors); switching
+Wallonia-1970 to Luxembourg falls back to Summer with its radio ticked;
+combined 1970 loads only `ORTHO_1971` (28 tiles, 0 errors); legal templates
+contain the new CC0 line and no "1967". Same results on the phone build.
+`1967` no longer appears anywhere outside the data blocks.
+Builds: v2 2,348,671 bytes sha256 `92fe2b43...`; mobile 2,358,744 bytes
+`16020f91...`. `alpha/` still has 1967 and is marked superseded in HANDOFF.
 
 ## Rebuild recipe (if the data ever needs regenerating)
 

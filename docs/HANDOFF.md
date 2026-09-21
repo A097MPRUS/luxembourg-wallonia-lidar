@@ -1,8 +1,8 @@
 # LiDAR map project - handoff for Claude
 
 Written 2026-09-20 by Kun, the assistant that made change sets A and B.
-Fully revised 2026-09-21 by Claude (change sets C and D: publishing, naming,
-and the switch to government aerial photos).
+Fully revised 2026-09-21 by Claude (change sets C, D and E: publishing, naming,
+the switch to government aerial photos, and dropping Luxembourg's 1967 photo).
 
 Read this file first, then CHANGES.md (every change in detail), then AGENTS.md
 (working rules), then `../handoff/ARCHITECTURE.md` (code map). The original
@@ -38,15 +38,15 @@ The owner's PC, absolute paths (everything lives under one folder):
 ```
 C:\Users\User\.kun\default_workspace\Plans\
   tests\          the builds (the working copies) and helpers
-    luxembourg-wallonie-lidar-v2.html      2,348,169 bytes, sha256 b7b61e82...
-    luxembourg-wallonie-lidar-mobile.html  2,358,242 bytes, sha256 975884fa...
+    luxembourg-wallonie-lidar-v2.html      2,348,671 bytes, sha256 92fe2b43...
+    luxembourg-wallonie-lidar-mobile.html  2,358,744 bytes, sha256 16020f91...
     serve-windows.cmd       double-click LAN server for phone testing
     allow-port-8000.cmd     one-time firewall helper (TCP 8000, private)
     RUINS-EXPANSION.md      change set A notes (totals superseded)
   alpha\          the orthophoto alpha the owner reviewed on 2026-09-21. Now
-                  promoted into tests\ (identical apart from the "(alpha)"
-                  title and header markers; the 1967 licence wording fix
-                  was applied to both). Safe to delete; ask first.
+                  promoted into tests\. SUPERSEDED: it still offers Luxembourg's
+                  1967 photo, which was removed from tests\ in change set
+                  E. Do not promote it again. Safe to delete; ask first.
   claude\         this documentation folder (HANDOFF, CHANGES, AGENTS)
   site\           the published GitHub Pages site, a git repo (section 12)
                   index.html + COPIES of both builds + README + docs\
@@ -55,8 +55,9 @@ C:\Users\User\.kun\default_workspace\Plans\
                   and push commands
   work\           scratch: raw Overpass pulls, build scripts, test dumps
                   (safe to delete; the changelog references the scripts).
-                  work\make_alpha.py is the script that produced the
-                  orthophoto change (change set D).
+                  work\make_alpha.py produced the orthophoto change (change
+                  set D); work\drop_1967.py removed Luxembourg's 1967 photo
+                  (change set E).
   handoff\        the previous agent's docs, kept for reference
 ```
 
@@ -94,7 +95,8 @@ History (2026-09-20, owner request): the older build files that used to sit in
    body scrolls. The phone panel got the same treatment for iOS Safari
    (`min-height:0`, entry B10 in CHANGES.md).
 6. **Government aerial photos replace Esri** (2026-09-21, change set D), with an
-   "Aerial photo" picker of four campaigns. Section 8.
+   "Aerial photo" picker: four options in Wallonia, three in Luxembourg
+   (1967 removed, change set E). Section 8.
 7. **"Wallonia" in English-facing text** (section 2).
 
 ## 5. Superseded facts in older docs
@@ -150,7 +152,7 @@ asked for it everywhere). Change set D in CHANGES.md has the full evidence.
 
 | Region | Service | Licence, as checked 2026-09-21 |
 | --- | --- | --- |
-| Luxembourg | ACT, `wmts{1-4}.geoportail.lu/opendata/wmts/<layer>/GLOBAL_WEBMERCATOR_4_V3/{z}/{x}/{y}.jpeg` | 2001, 2025 summer and 2025 winter: CC0 (public domain) on data.public.lu. **1967: published by ACT on data.public.lu with licence "notspecified"**, so no licence is claimed for it. Everything served from the `opendata` WMTS path. |
+| Luxembourg | ACT, `wmts{1-4}.geoportail.lu/opendata/wmts/<layer>/GLOBAL_WEBMERCATOR_4_V3/{z}/{x}/{y}.jpeg` | Only CC0 (public domain) editions are used: 2001, 2025 summer, 2025 winter, each `cc-zero` on data.public.lu. The 1967 edition (`ortho_1967`) has licence "notspecified" there and was **removed** at the owner's request (change set E). Do not add it back. |
 | Wallonia | SPW, `geoservices.wallonie.be/arcgis/services/IMAGERIE/<service>/MapServer/WMSServer` (WMS 1.3.0, layer `0`, EPSG:3857) | SPW "Conditions d'accès et d'utilisation des services web géographiques de visualisation" v1.1 (2016): free for any user; keep the source credited, do not alter the images, do not overload the servers. Same terms as the relief layers. |
 
 Attribution in the map reads "Relief, orthophoto : © ACT / geoportail.lu" and
@@ -164,10 +166,16 @@ forbid removing the source mention.
 | Summer (`summer`, default) | `ortho_2025` (2025 été) | `ORTHO_2023_ETE` (2023) |
 | Winter / spring (`leafoff`) | `ortho_2025_winter` (2025 hiver) | `ORTHO_2026_PRINTEMPS` (2026) |
 | Around 2001 (`y2001`) | `ortho_2001` | `ORTHO_2001_2003` |
-| Around 1970 (`y1970`) | `ortho_1967` | `ORTHO_1971` |
+| Around 1970 (`y1970`) | none (`lu: null`) | `ORTHO_1971` |
 
 Years come from each service's own title. The year column shows the Luxembourg
 year, the Walloon year, or both ("2025 / 2023") in the combined region.
+
+**Options without a Luxembourg photo** (`lu: null`, currently only `y1970`):
+`imgAvail(def)` hides them in the Luxembourg region; in the combined region
+they show Wallonia only, year column "WAL 1971", and Luxembourg has no photo
+under the swipe. If the chosen option is not available after a region switch,
+`setImagery` falls back to Summer and ticks its radio.
 
 **Coverage was verified before choosing**, because some SPW campaigns are
 partial. Tested at 10 Walloon towns (Tournai, Mons, Namur, Liège, Eupen,
@@ -258,9 +266,6 @@ sources table in both builds, and update the table above.
 - Phone build is untested on real hardware. It boots clean in headless
   testing and at 375 px in a browser, but nobody has touched it with fingers.
 - The combined-view border strip (section 8, known quirk).
-- Luxembourg's 1967 photo (the "Around 1970" option) has no stated licence on
-  data.public.lu. The legal page says so. Dropping that one option for
-  Luxembourg is a one-row change if the owner wants zero ambiguity.
 - Bike overlay removal recipe (section 9) is one request away.
 - "Mine shafts" chip text now also covers adits; renaming is possible.
 - Casemates (Pétrusse, Bock) were treated as fortifications, not bunkers.
