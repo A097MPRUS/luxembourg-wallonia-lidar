@@ -1,33 +1,41 @@
 Copyright (c) 2026 A097MPRUS. All rights reserved.
 
-This repository and everything the owner created in it (the source code, the
-page design, the texts and the way the data is selected and presented) are
-protected by copyright. No licence is granted.
+WHAT THIS NOTICE COVERS
 
-Without the owner's prior written permission, you may NOT:
+Only the original work of the repository owner:
 
-  - copy, download for reuse, republish or redistribute this work, in whole
-    or in part;
-  - modify it, translate it, or build anything on it;
-  - create derivative works, copies, clones or "inspired" versions of it;
-  - use it, or any part of it, in another project, website or product,
-    commercial or not.
+  - the program code of the two map pages and the landing page (HTML, CSS and
+    JavaScript written for this project);
+  - the page design;
+  - the texts written by the owner (interface wording, landing page, README,
+    AGENTS).
 
-You may view the website at https://a097mprus.github.io/luxembourg-wallonia-lidar/
-for personal use. The terms of service of GitHub, which hosts this repository,
-still allow viewing and forking within GitHub itself; no other right follows
-from that.
+No licence is granted for that work. Without the owner's prior written
+permission, you may NOT copy, republish, redistribute, modify, translate or
+reuse it, in whole or in part, or build any derivative work, copy, clone or
+"inspired" version of it, commercial or not.
 
-Third-party material is not covered by this notice and stays under its own
-licence:
+GitHub's terms of service, which apply to every public repository, allow
+viewing and forking within GitHub; no other right follows from that.
+
+WHAT THIS NOTICE DOES NOT COVER
+
+The maps, imagery and data are NOT the owner's work and the owner claims no
+rights over them. They belong to their providers and stay under their own
+licences:
 
   - LiDAR relief, cadastre and aerial photos: Administration du cadastre et de
-    la topographie (ACT, Luxembourg) and Service public de Wallonie (SPW),
-    under their respective open data and web service conditions;
-  - place names, ruins, bunkers, building outlines and bike trails: data
-    (c) OpenStreetMap contributors, under the Open Database Licence 1.0;
-  - elevation outside the LiDAR: Copernicus DEM GLO-90 via Open-Meteo;
-  - Leaflet 1.9.4 (c) Volodymyr Agafonkin and contributors, under the BSD
-    2-Clause licence.
+    la topographie (ACT, Luxembourg) and Service public de Wallonie (SPW).
+    They are loaded from those providers' own servers and are not stored in
+    this repository.
+  - The data embedded in the map pages (place names, ruin, bunker and other
+    site points, building outlines, bike trails and territory borders) is
+    derived from OpenStreetMap: (c) OpenStreetMap contributors, available
+    under the Open Database Licence 1.0 (https://opendatacommons.org/licenses/odbl/).
+    That licence, not this notice, governs its use.
+  - Elevation outside the LiDAR: Copernicus DEM GLO-90, served by Open-Meteo.
+  - Address search: Nominatim, OpenStreetMap.
+  - Leaflet 1.9.4: (c) Volodymyr Agafonkin and contributors, BSD 2-Clause
+    licence.
 
 For permission requests, contact the repository owner through GitHub.
