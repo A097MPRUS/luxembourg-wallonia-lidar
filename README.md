@@ -107,6 +107,15 @@ session only.
   border, so a thin strip on the Luxembourg side shows the Walloon photo. Single region views are
   unaffected.
 
+## Copyright and use
+
+**Copyright (c) 2026 A097MPRUS. All rights reserved.** Nobody may copy, reuse, modify,
+redistribute, or make anything based on this work (the code, design and texts) without the
+owner's written permission. No licence is granted. See [LICENSE](LICENSE).
+
+Third-party data and software shown or used here (ACT, SPW, OpenStreetMap, Copernicus, Leaflet)
+remain under their own licences, listed in the Data sources section above.
+
 ## Documentation
 
 | File | Contents |

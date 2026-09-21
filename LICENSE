@@ -1,0 +1,33 @@
+Copyright (c) 2026 A097MPRUS. All rights reserved.
+
+This repository and everything the owner created in it (the source code, the
+page design, the texts and the way the data is selected and presented) are
+protected by copyright. No licence is granted.
+
+Without the owner's prior written permission, you may NOT:
+
+  - copy, download for reuse, republish or redistribute this work, in whole
+    or in part;
+  - modify it, translate it, or build anything on it;
+  - create derivative works, copies, clones or "inspired" versions of it;
+  - use it, or any part of it, in another project, website or product,
+    commercial or not.
+
+You may view the website at https://a097mprus.github.io/luxembourg-wallonia-lidar/
+for personal use. The terms of service of GitHub, which hosts this repository,
+still allow viewing and forking within GitHub itself; no other right follows
+from that.
+
+Third-party material is not covered by this notice and stays under its own
+licence:
+
+  - LiDAR relief, cadastre and aerial photos: Administration du cadastre et de
+    la topographie (ACT, Luxembourg) and Service public de Wallonie (SPW),
+    under their respective open data and web service conditions;
+  - place names, ruins, bunkers, building outlines and bike trails: data
+    (c) OpenStreetMap contributors, under the Open Database Licence 1.0;
+  - elevation outside the LiDAR: Copernicus DEM GLO-90 via Open-Meteo;
+  - Leaflet 1.9.4 (c) Volodymyr Agafonkin and contributors, under the BSD
+    2-Clause licence.
+
+For permission requests, contact the repository owner through GitHub.
