@@ -428,6 +428,22 @@ LiDAR" and "... Mobile", the region menu reads Luxembourg / Wallonia /
 Luxembourg + Wallonia, no console errors. Sizes unchanged (same letter
 count); new sha256 prefixes v2 `f75b407a`, mobile `4a403b8e`.
 
+### C7. Repo made private, GitHub Pages switched off (2026-09-21)
+
+**What.** `A097MPRUS/luxembourg-wallonie-lidar` visibility public -> private
+(`gh repo edit --visibility private`). Making it private also removed the
+Pages configuration (`GET /pages` now 404). No files changed.
+
+**Why.** Owner asked immediately, worried that Esri World Imagery not being
+open data means legal exposure.
+
+**Evidence.** API reports `private: true`. A fresh uncached request to the
+site returns HTTP 404 with `X-Cache: MISS`; the bare root URL still returned
+the old page from GitHub's CDN cache for a few minutes afterwards.
+
+**To undo** (only if the owner asks): make the repo public again and
+re-enable Pages from `main` at `/`. Resolve the imagery licence first.
+
 ## Rebuild recipe (if the data ever needs regenerating)
 
 - Raw pulls: `work/*.overpass` files; responses in `work/*.json`.
